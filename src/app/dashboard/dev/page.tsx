@@ -47,7 +47,11 @@ export default function DevDashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-indigo-50 rounded-xl p-4">
                 <span className="text-xs text-gray-500 uppercase tracking-wider">Compétences</span>
-                <p className="font-semibold mt-1">{profile.skills || "—"}</p>
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {Array.isArray(profile.skills) ? profile.skills.map((s: string) => (
+                    <span key={s} className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium">{s}</span>
+                  )) : <span className="text-gray-400 text-sm">—</span>}
+                </div>
               </div>
               <div className="bg-indigo-50 rounded-xl p-4">
                 <span className="text-xs text-gray-500 uppercase tracking-wider">Statut</span>
