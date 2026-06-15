@@ -26,6 +26,7 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
     { href: "/dashboard/employer", label: "Dashboard" },
     { href: "/dashboard/employer/missions", label: "Mes missions" },
     { href: "/dashboard/employer/create-mission", label: "Nouvelle mission" },
+    { href: "/dashboard/employer/profile", label: "Mon profil" },
   ];
 
   const links = role === "dev" ? devLinks : employerLinks;
