@@ -54,14 +54,26 @@ export default function DevMatchesPage() {
 
   const acceptMission = async (matchId: string) => {
     setAccepting(matchId);
-    const supabase = createClient();
-    const { error } = await supabase.from("matches").update({ status: "matched" }).eq("id", matchId);
-    if (error) {
-      setMessage("Erreur lors de l'acceptation");
-    } else {
-      setMatches((prev) => prev.map((m) => m.id === matchId ? { ...m, status: "matched" } : m));
-      setMessage("✅ Mission acceptée ! L'employeur va vous contacter.");
+    
+    // First charge via Stripe
+    const chargeRes = await fetch("/api/stripe/charge", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matchId }),
+    });
+    const chargeData = await chargeRes.json();
+    
+    if (!chargeData.success) {
+      setMessageType("error");
+      setMessage(`Erreur de paiement: ${chargeData.error || "La carte de l'employeur n'a pas pu être débitée"}`);
+      setAccepting(null);
+      return;
     }
+    
+    // Update locally
+    setMatches((prev) => prev.map((m) => m.id === matchId ? { ...m, status: "matched" } : m));
+    setMessageType("success");
+    setMessage(`✅ Mission acceptée ! Commission de ${chargeData.amount}€ prélevée. L'employeur va vous contacter.`);
     setAccepting(null);
   };
 
