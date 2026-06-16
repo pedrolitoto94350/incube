@@ -23,6 +23,7 @@ export default function CreateMissionPage() {
       title: form.title,
       description: form.description,
       project_type: form.project_type,
+      budget: form.budget ? parseInt(form.budget) : null,
       status: "open",
     });
     if (insertError) { setError(insertError.message); setLoading(false); return; }
