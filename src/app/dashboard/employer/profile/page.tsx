@@ -33,9 +33,10 @@ function SetupForm({ onSuccess }: { onSuccess: () => void }) {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        const si = result.setupIntent as any
         await supabase.from("profiles").update({
-          stripe_customer_id: result.setupIntent.customer as string,
-          stripe_payment_method_id: result.setupIntent.payment_method as string,
+          stripe_customer_id: si.customer as string,
+          stripe_payment_method_id: si.payment_method as string,
         }).eq("id", user.id);
       }
       onSuccess();
@@ -80,7 +81,7 @@ export default function EmployerEditProfile() {
         setHasCard(!!data.stripe_payment_method_id);
       }
       // Create setup intent
-      const res = await fetch("/api/stripe/setup-intent", { method: "POST" });
+      const res = await fetch("/api/stripe/setup-intent", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
       const json = await res.json();
       setClientSecret(json.clientSecret);
       setLoading(false);
@@ -149,19 +150,16 @@ export default function EmployerEditProfile() {
           <p className="text-sm text-gray-500 mb-4">
             {hasCard 
               ? "✅ Carte enregistrée. La commission sera prélevée automatiquement lors d'un match."
-              : "Enregistrez votre carte pour pouvoir proposer des missions aux développeurs. Vous ne serez débité que si un développeur accepte votre mission (commission plafonnée à 300€)."
+              : "Enregistrez votre carte pour pouvoir proposer des missions. Vous ne serez débité que si un développeur accepte (commission plafonnée à 300€)."
             }
           </p>
-          {hasCard && !cardAdded && (
-            <div className="bg-green-50 text-green-700 p-4 rounded-xl text-sm">✅ Carte déjà enregistrée</div>
-          )}
           {!hasCard && clientSecret && (
             <Elements stripe={stripePromise} options={{ clientSecret }}>
               <SetupForm onSuccess={() => setCardAdded(true)} />
             </Elements>
           )}
-          {cardAdded && (
-            <div className="bg-green-50 text-green-700 p-4 rounded-xl text-sm">✅ Carte enregistrée avec succès !</div>
+          {(hasCard || cardAdded) && (
+            <div className="bg-green-50 text-green-700 p-4 rounded-xl text-sm">✅ Carte enregistrée</div>
           )}
         </div>
       </div>
