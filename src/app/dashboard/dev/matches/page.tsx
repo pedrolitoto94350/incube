@@ -27,7 +27,16 @@ export default function DevMatchesPage() {
       if (mData) {
         setMatches(mData);
         // Fetch employer profiles
-        const employerIds = [...new Set(mData.map((m: any) => m.employer_id))];
+        // Parse skills from string to array if needed
+      const parseSkills = (skills: any): string[] => {
+        if (Array.isArray(skills)) return skills;
+        if (typeof skills === 'string') {
+          try { return JSON.parse(skills); } catch { return []; }
+        }
+        return [];
+      };
+
+      const employerIds = [...new Set(mData.map((m: any) => m.employer_id))];
         if (employerIds.length > 0) {
           const { data: pData } = await supabase.from("profiles").select("*").in("id", employerIds);
           if (pData) {

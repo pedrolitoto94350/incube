@@ -94,8 +94,16 @@ export default function MissionDetailPage() {
     setProposing(null);
   };
 
+  const parseSkills = (skills: any): string[] => {
+    if (Array.isArray(skills)) return skills;
+    if (typeof skills === 'string') {
+      try { return JSON.parse(skills); } catch { return []; }
+    }
+    return [];
+  };
+
   const filteredProfiles = profiles.filter((p) => {
-    const skills = Array.isArray(p.skills) ? p.skills : [];
+    const skills = parseSkills(p.skills);
     const query = searchQuery.toLowerCase();
 
     // Text search
@@ -208,7 +216,7 @@ export default function MissionDetailPage() {
             </div>
           )}
           {filteredProfiles.map((profile) => {
-            const skills: string[] = Array.isArray(profile.skills) ? profile.skills : [];
+            const skills = parseSkills(profile.skills);
             return (
               <div key={profile.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:border-indigo-200 transition-all">
                 <div className="flex items-start justify-between">
