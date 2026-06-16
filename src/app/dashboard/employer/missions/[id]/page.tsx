@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { createClient } from "../../../../../lib/supabase";
@@ -48,8 +50,8 @@ export default function MissionDetailPage() {
       if (mErr || !mData) { setError("Mission introuvable"); setLoading(false); return; }
       setMission(mData);
 
-      // Fetch all dev profiles
-      const { data: pData } = await supabase.from("profiles").select("*").eq("role", "dev");
+      // Fetch all dev profiles (no cache)
+      const { data: pData } = await supabase.from("profiles").select("*").eq("role", "dev").limit(100);
       if (pData) {
         // Fetch proposals to filter
         const { data: propData } = await supabase
