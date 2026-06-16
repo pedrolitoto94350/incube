@@ -223,11 +223,10 @@ export default function MissionDetailPage() {
               <div key={profile.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:border-indigo-200 transition-all">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg">{profile.full_name || "Anonyme"}</h3>
+                    <h3 className="font-semibold text-lg">Développeur·se 👨‍💻</h3>
                     <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
                       {profile.english_level && <span>🌍 {profile.english_level}</span>}
                       {profile.availability && <span>⏰ {profile.availability}</span>}
-                      {profile.email && <span className="text-xs">{profile.email}</span>}
                     </div>
                     <div className="flex flex-wrap gap-1.5 mt-3">
                       {skills.map((skill: string) => (
