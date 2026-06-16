@@ -15,7 +15,9 @@ export default function DevMatchesPage() {
   const [profiles, setProfiles] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
   const [accepting, setAccepting] = useState<string | null>(null);
+  const [refusing, setRefusing] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error">("success");
 
   useEffect(() => {
     (async () => {
@@ -63,13 +65,28 @@ export default function DevMatchesPage() {
     setAccepting(null);
   };
 
+  const refuseMission = async (matchId: string) => {
+    setRefusing(matchId);
+    const supabase = createClient();
+    const { error } = await supabase.from("matches").update({ status: "cancelled" }).eq("id", matchId);
+    if (error) {
+      setMessageType("error");
+      setMessage("Erreur lors du refus");
+    } else {
+      setMatches((prev) => prev.map((m) => m.id === matchId ? { ...m, status: "cancelled" } : m));
+      setMessageType("error");
+      setMessage("❌ Mission refusée");
+    }
+    setRefusing(null);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <DashboardNav role="dev" />
       <div className="max-w-4xl mx-auto px-4 pt-24 pb-8">
         <h1 className="text-2xl font-bold mb-6">Mes propositions</h1>
 
-        {message && <div className="mb-6 p-4 rounded-xl bg-green-50 text-green-700 text-sm">{message}</div>}
+        {message && <div className={classNames("mb-6 p-4 rounded-xl text-sm", messageType === "success" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600")}>{message}</div>}
 
         {loading && <p className="text-gray-500">Chargement...</p>}
 
@@ -115,13 +132,22 @@ export default function DevMatchesPage() {
                   </div>
 
                   {match.status === "proposed" && (
-                    <button
-                      onClick={() => acceptMission(match.id)}
-                      disabled={accepting === match.id}
-                      className="ml-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium hover:shadow-lg transition-all disabled:opacity-50 whitespace-nowrap"
-                    >
-                      {accepting === match.id ? "..." : "✅ Accepter"}
-                    </button>
+                    <div className="ml-4 flex flex-col gap-2">
+                      <button
+                        onClick={() => acceptMission(match.id)}
+                        disabled={accepting === match.id}
+                        className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium hover:shadow-lg transition-all disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {accepting === match.id ? "..." : "✅ Accepter"}
+                      </button>
+                      <button
+                        onClick={() => refuseMission(match.id)}
+                        disabled={refusing === match.id}
+                        className="px-6 py-2.5 rounded-xl border border-red-200 text-red-600 font-medium hover:bg-red-50 transition-all disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {refusing === match.id ? "..." : "❌ Refuser"}
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
