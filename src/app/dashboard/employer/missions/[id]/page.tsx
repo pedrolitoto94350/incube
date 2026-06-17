@@ -209,6 +209,9 @@ export default function MissionDetailPage() {
           )}
         </div>
 
+        {/* Debug info */}
+        <div className="text-xs text-gray-400 mb-2">{profiles.length} devs chargés · {filteredProfiles.length} filtrés · {selectedSkills.length} filtre(s) actif(s)</div>
+
         {/* Results */}
         <div className="space-y-4">
           {filteredProfiles.length === 0 && (
