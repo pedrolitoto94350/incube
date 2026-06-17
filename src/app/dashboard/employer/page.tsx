@@ -10,6 +10,8 @@ export default function EmployerDashboard() {
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [missions, setMissions] = useState<any[]>([]);
+  const [matchesCount, setMatchesCount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -18,57 +20,125 @@ export default function EmployerDashboard() {
       if (!user) { router.push("/login"); return; }
       const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
       setProfile(data);
+
+      const { data: mData } = await supabase.from("matches").select("id").eq("employer_id", user.id);
+      if (mData) setMatchesCount(mData.length);
+
+      const { data: missData } = await supabase.from("matches").select("title, budget, status").eq("employer_id", user.id);
+      if (missData) setMissions(missData);
+
       setLoading(false);
     })();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><p className="text-gray-500">Chargement...</p></div>;
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <DashboardNav role="employer" />
-      <div className="max-w-4xl mx-auto px-4 pt-24 pb-8">
-        <h1 className="text-2xl font-bold mb-8">Dashboard employeur</h1>
-
-        {!profile?.company_name ? (
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-8 text-white">
-            <h2 className="text-xl font-bold mb-2">Bienvenue sur InCube 👋</h2>
-            <p className="text-indigo-100 mb-6">Commence par compléter ton profil entreprise.</p>
-            <Link href="/dashboard/employer/profile" className="inline-block px-6 py-3 rounded-xl bg-white text-indigo-600 font-medium hover:shadow-lg transition-all">
-              Compléter mon profil →
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" /></div>;
+  if (!profile?.company_name) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
+        <DashboardNav role="employer" />
+        <div className="max-w-4xl mx-auto px-4 pt-24 pb-8">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-600 p-8 md:p-12 text-white">
+            <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-xl" />
+            <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white/5 rounded-full blur-lg" />
+            <h2 className="text-2xl md:text-3xl font-bold mb-2 relative">Bienvenue sur InCube 👋</h2>
+            <p className="text-indigo-100 mb-8 max-w-md relative">Configure ton profil entreprise pour commencer à recruter.</p>
+            <Link
+              href="/dashboard/employer/profile"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-indigo-700 font-medium hover:shadow-xl hover:shadow-indigo-500/20 transition-all relative"
+            >
+              ✨ Configurer mon entreprise
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </Link>
           </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-gray-100 p-8">
-            <h2 className="font-semibold text-xl mb-1">{profile.company_name} 👋</h2>
-            <p className="text-gray-500 mb-6">Bienvenue sur ton tableau de bord employeur.</p>
+        </div>
+      </div>
+    );
+  }
 
-            {/* Company info cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div className="bg-slate-50 rounded-xl p-4">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">🏢 Entreprise</span>
-                <p className="font-semibold mt-1.5">{profile.company_name}</p>
-              </div>
-              <div className="bg-slate-50 rounded-xl p-4">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">📧 Email</span>
-                <p className="font-semibold mt-1.5 text-sm truncate">{profile.email}</p>
-              </div>
-            </div>
+  const activeMissions = missions.filter(m => m.status === "proposed" || m.status === "active").length;
+  const matchedMissions = missions.filter(m => m.status === "matched").length;
 
-            {/* Quick actions */}
-            <div className="bg-gradient-to-br from-violet-50 to-indigo-50 rounded-2xl p-6">
-              <h3 className="font-semibold mb-3">🚀 Actions rapides</h3>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/dashboard/employer/create-mission" className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all">
-                  + Publier une mission
-                </Link>
-                <Link href="/dashboard/employer/missions" className="px-6 py-3 rounded-xl bg-white border border-gray-200 text-gray-700 font-medium hover:border-indigo-200 hover:text-indigo-600 transition-all">
-                  📋 Voir mes missions
-                </Link>
-              </div>
-            </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50/30">
+      <DashboardNav role="employer" />
+      <div className="max-w-5xl mx-auto px-4 pt-28 pb-12">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+              {profile.company_name} ✨
+            </h1>
+            <p className="text-slate-500 mt-1">Tableau de bord recruteur</p>
           </div>
-        )}
+          <Link
+            href="/dashboard/employer/create-mission"
+            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all"
+          >
+            ➜ Publier une mission
+          </Link>
+        </div>
+
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+          {[
+            { label: "Missions actives", value: activeMissions, emoji: "📋", color: "from-blue-50 to-indigo-50" },
+            { label: "Matchs réalisés", value: matchedMissions, emoji: "🤝", color: "from-emerald-50 to-teal-50" },
+            { label: "Propositions", value: matchesCount, emoji: "📩", color: "from-amber-50 to-orange-50" },
+            { label: "Secteur", value: profile.sector || "—", emoji: "🎯", color: "from-rose-50 to-pink-50" },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className={`rounded-2xl bg-gradient-to-br ${stat.color} p-4 border border-white/50`}
+            >
+              <div className="text-sm text-slate-500 font-medium flex items-center gap-1.5">
+                <span>{stat.emoji}</span>
+                {stat.label}
+              </div>
+              <p className="text-slate-800 font-semibold mt-1.5 capitalize text-lg">{stat.value}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Quick actions */}
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold text-slate-800 mb-4">🚀 Actions rapides</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Link
+              href="/dashboard/employer/create-mission"
+              className="rounded-2xl bg-white/70 backdrop-blur-sm border border-slate-100 p-5 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group"
+            >
+              <span className="text-2xl mb-2 block">📝</span>
+              <p className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">Nouvelle mission</p>
+              <p className="text-sm text-slate-400 mt-1">Décris le projet et ton budget</p>
+            </Link>
+            <Link
+              href="/dashboard/employer/missions"
+              className="rounded-2xl bg-white/70 backdrop-blur-sm border border-slate-100 p-5 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group"
+            >
+              <span className="text-2xl mb-2 block">📋</span>
+              <p className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">Mes missions</p>
+              <p className="text-sm text-slate-400 mt-1">Gère tes annonces et propositions</p>
+            </Link>
+            <Link
+              href="/dashboard/employer/profile"
+              className="rounded-2xl bg-white/70 backdrop-blur-sm border border-slate-100 p-5 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group"
+            >
+              <span className="text-2xl mb-2 block">⚙️</span>
+              <p className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">Mon profil</p>
+              <p className="text-sm text-slate-400 mt-1">Gère les infos de ton entreprise</p>
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile shortcuts */}
+        <div className="sm:hidden grid grid-cols-2 gap-3">
+          <Link href="/dashboard/employer/missions" className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-sm font-medium">
+            📋 Mes missions
+          </Link>
+          <Link href="/dashboard/employer/create-mission" className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium">
+            ➜ Nouvelle mission
+          </Link>
+        </div>
       </div>
     </div>
   );
