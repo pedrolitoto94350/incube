@@ -65,12 +65,12 @@ export default function EmployerDashboard() {
         {/* Header */}
         {/* Missing card banner */}
         {!profile?.stripe_payment_method_id && (
-          <div className="mb-6 p-4 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 flex items-center justify-between gap-4">
+          <div className="mb-6 p-4 rounded-xl border border-dashed border-gray-200 bg-white flex items-center justify-between gap-4">
             <div>
-              <p className="font-semibold text-amber-800">💳 Carte bleue requise</p>
-              <p className="text-sm text-amber-700">Vous ne pouvez pas proposer de mission sans carte enregistrée. Ajoutez-la dans votre profil.</p>
+              <p className="font-semibold text-gray-800">💳 Carte bleue requise</p>
+              <p className="text-sm text-gray-500">Vous ne pouvez pas proposer de mission sans carte enregistrée.</p>
             </div>
-            <Link href="/dashboard/employer/profile" className="shrink-0 px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors whitespace-nowrap">
+            <Link href="/dashboard/employer/profile" className="shrink-0 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap">
               Ajouter →
             </Link>
           </div>
