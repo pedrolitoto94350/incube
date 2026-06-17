@@ -76,8 +76,24 @@ export default function MissionDetailPage() {
 
   const proposeMission = async (devId: string) => {
     setProposing(devId);
+    setError("");
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
+
+    // Check if already proposed
+    const { data: existing } = await supabase
+      .from("matches")
+      .select("id")
+      .eq("employer_id", user!.id)
+      .eq("dev_id", devId)
+      .eq("status", "proposed");
+
+    if (existing && existing.length > 0) {
+      setError("Proposition déjà envoyée à ce développeur");
+      setProposing(null);
+      return;
+    }
+
     const { error: err } = await supabase.from("matches").insert({
       employer_id: user!.id,
       dev_id: devId,
