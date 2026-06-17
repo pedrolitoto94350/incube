@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server"
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "REMOVED"
-
 export async function POST(req: Request) {
   try {
     const { customerId } = await req.json()
     const Stripe = (await import("stripe")).default
-    const stripe = new Stripe(stripeSecretKey, { apiVersion: "2026-05-27.dahlia" })
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2026-05-27.dahlia" })
 
     let customer
     if (customerId) {

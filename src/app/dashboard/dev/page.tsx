@@ -44,24 +44,45 @@ export default function DevDashboard() {
           <div className="bg-white rounded-2xl border border-gray-100 p-8">
             <h2 className="font-semibold text-xl mb-1">Salut {profile.full_name} 👋</h2>
             <p className="text-gray-500 mb-6">Bienvenue sur ton tableau de bord.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-indigo-50 rounded-xl p-4">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">Compétences</span>
-                <div className="flex flex-wrap gap-1.5 mt-2">
-                  {Array.isArray(profile.skills) ? profile.skills.map((s: string) => (
-                    <span key={s} className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium">{s}</span>
-                  )) : <span className="text-gray-400 text-sm">—</span>}
+
+            {/* Skills section — agrandie et aérée */}
+            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">🛠️ Compétences</span>
+                  <p className="text-sm text-gray-400 mt-0.5">Les compétences que tu as renseignées</p>
                 </div>
               </div>
-              <div className="bg-indigo-50 rounded-xl p-4">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">Statut</span>
-                <p className="font-semibold mt-1">En recherche</p>
-              </div>
-              <div className="bg-indigo-50 rounded-xl p-4">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">Email</span>
-                <p className="font-semibold mt-1 text-sm truncate">{profile.email}</p>
+              <div className="flex flex-wrap gap-2">
+                {Array.isArray(profile.skills) ? profile.skills.map((s: string) => (
+                  <span key={s} className="px-3.5 py-2 bg-white shadow-sm border border-indigo-100 text-indigo-700 rounded-xl text-sm font-medium hover:shadow-md hover:border-indigo-200 transition-all">
+                    {s}
+                  </span>
+                )) : <span className="text-gray-400 text-sm">—</span>}
               </div>
             </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-slate-50 rounded-xl p-4">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">🌍 Anglais</span>
+                <p className="font-semibold mt-1.5 capitalize">{profile.english_level || "—"}</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-4">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">⏰ Disponibilité</span>
+                <p className="font-semibold mt-1.5 capitalize">{profile.availability || "—"}</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-4">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">📧 Email</span>
+                <p className="font-semibold mt-1.5 text-sm truncate">{profile.email}</p>
+              </div>
+            </div>
+
+            {profile.bio && (
+              <div className="mt-6 bg-slate-50 rounded-xl p-4">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">📝 Bio</span>
+                <p className="text-sm text-gray-600 mt-1.5 leading-relaxed">{profile.bio}</p>
+              </div>
+            )}
           </div>
         )}
       </div>

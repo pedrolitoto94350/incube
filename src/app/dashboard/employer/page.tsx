@@ -42,19 +42,31 @@ export default function EmployerDashboard() {
           <div className="bg-white rounded-2xl border border-gray-100 p-8">
             <h2 className="font-semibold text-xl mb-1">{profile.company_name} 👋</h2>
             <p className="text-gray-500 mb-6">Bienvenue sur ton tableau de bord employeur.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-indigo-50 rounded-xl p-4">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">Entreprise</span>
-                <p className="font-semibold mt-1">{profile.company_name}</p>
+
+            {/* Company info cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div className="bg-slate-50 rounded-xl p-4">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">🏢 Entreprise</span>
+                <p className="font-semibold mt-1.5">{profile.company_name}</p>
               </div>
-              <div className="bg-indigo-50 rounded-xl p-4">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">Email</span>
-                <p className="font-semibold mt-1 text-sm truncate">{profile.email}</p>
+              <div className="bg-slate-50 rounded-xl p-4">
+                <span className="text-xs text-gray-500 uppercase tracking-wider">📧 Email</span>
+                <p className="font-semibold mt-1.5 text-sm truncate">{profile.email}</p>
               </div>
             </div>
-            <Link href="/dashboard/employer/create-mission" className="mt-6 inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg transition-all">
-              Publier une mission →
-            </Link>
+
+            {/* Quick actions */}
+            <div className="bg-gradient-to-br from-violet-50 to-indigo-50 rounded-2xl p-6">
+              <h3 className="font-semibold mb-3">🚀 Actions rapides</h3>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/dashboard/employer/create-mission" className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all">
+                  + Publier une mission
+                </Link>
+                <Link href="/dashboard/employer/missions" className="px-6 py-3 rounded-xl bg-white border border-gray-200 text-gray-700 font-medium hover:border-indigo-200 hover:text-indigo-600 transition-all">
+                  📋 Voir mes missions
+                </Link>
+              </div>
+            </div>
           </div>
         )}
       </div>
