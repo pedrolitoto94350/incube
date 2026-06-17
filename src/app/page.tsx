@@ -73,7 +73,7 @@ export default function Home() {
       <section className="relative z-10 min-h-screen flex items-center justify-center overflow-hidden">
         {/* Fullscreen video background */}
         <video className="absolute inset-0 w-full h-full object-cover" autoPlay muted loop playsInline>
-          <source src="https://drive.google.com/uc?export=download&id=1LIaaz3uZsXIao7ZDoMN9ITRpFVXetPgo" type="video/mp4" />
+          <source src="/hero-video.mp4" type="video/mp4" />
         </video>
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/50" />
