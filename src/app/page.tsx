@@ -70,26 +70,28 @@ export default function Home() {
           </div>
         </div>
       </nav>
-      <section className="relative z-10 min-h-screen flex items-center justify-center px-6 pt-20">
-        <motion.div className="max-w-4xl mx-auto text-center" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <motion.div className="inline-block mb-6 px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-xs text-emerald-700 font-medium" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+      <section className="relative z-10 min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Fullscreen video background */}
+        <video className="absolute inset-0 w-full h-full object-cover" autoPlay muted loop playsInline>
+          <source src="https://drive.google.com/uc?export=download&id=1LIaaz3uZsXIao7ZDoMN9ITRpFVXetPgo" type="video/mp4" />
+        </video>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        {/* Content */}
+        <motion.div className="relative z-10 max-w-4xl mx-auto text-center px-6" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <motion.div className="inline-block mb-6 px-4 py-1.5 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-xs text-white font-medium" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             🚀 Nouvelle plateforme de matching équitable
           </motion.div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-            Le matching<br /><span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">enfin équitable</span>
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight text-white">
+            Le matching<br /><span className="bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 bg-clip-text text-transparent">enfin équitable</span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10">
             InCube connecte développeurs juniors français avec employeurs européens. Matching aléatoire, zéro CV, zéro engagement.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Link href="/signup/dev" className="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-lg hover:shadow-xl hover:shadow-emerald-200 transition-all">Je suis développeur</Link>
-            <Link href="/signup/employer" className="px-8 py-4 rounded-2xl bg-white border-2 border-gray-200 text-gray-700 font-semibold text-lg hover:border-emerald-300 transition-all">Je recrute</Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/signup/dev" className="px-8 py-4 rounded-2xl bg-white text-emerald-800 font-semibold text-lg hover:shadow-xl transition-all">Je suis développeur</Link>
+            <Link href="/signup/employer" className="px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-md border-2 border-white/40 text-white font-semibold text-lg hover:bg-white/20 transition-all">Je recrute</Link>
           </div>
-
-          {/* YouTube demo video */}
-          <motion.div className="max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-gray-100" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}>
-            <iframe className="w-full aspect-video" src="https://www.youtube.com/embed/gQYhsQBBAWo" title="InCube démo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-          </motion.div>
         </motion.div>
       </section>
       <section id="how-it-works" className="relative z-10 py-32 px-6">
