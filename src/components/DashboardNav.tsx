@@ -5,14 +5,47 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "../lib/supabase";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
 
   const isEmployer = role === "employer";
+
+  // Fetch pending proposals for devs
+  useEffect(() => {
+    if (isEmployer) return;
+    const fetchPending = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { count } = await supabase
+        .from("matches")
+        .select("id", { count: "exact", head: true })
+        .eq("dev_id", user.id)
+        .eq("status", "proposed");
+      setPendingCount(count || 0);
+
+      // Subscribe to new matches (real-time)
+      const channel = supabase
+        .channel("dev-matches")
+        .on("postgres_changes", {
+          event: "INSERT",
+          schema: "public",
+          table: "matches",
+          filter: `dev_id=eq.${user.id}`,
+        }, () => {
+          setPendingCount((prev) => prev + 1);
+        })
+        .subscribe();
+
+      return () => supabase.removeChannel(channel);
+    };
+    fetchPending();
+  }, [isEmployer]);
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -20,13 +53,13 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
     router.push("/");
   };
 
-  const devLinks = [
+  const devLinks: { href: string; label: string; badge?: number }[] = [
     { href: "/dashboard/dev", label: "📊 Dashboard" },
-    { href: "/dashboard/dev/matches", label: "🤝 Mes matches" },
+    { href: "/dashboard/dev/matches", label: "🤝 Mes matches", badge: pendingCount },
     { href: "/dashboard/dev/profile", label: "👤 Mon profil" },
   ];
 
-  const employerLinks = [
+  const employerLinks: { href: string; label: string; badge?: number }[] = [
     { href: "/dashboard/employer", label: "📊 Dashboard" },
     { href: "/dashboard/employer/missions", label: "📋 Mes missions" },
     { href: "/dashboard/employer/create-mission", label: "➕ Nouvelle mission" },
@@ -58,12 +91,17 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
                       }`}
                     />
                   )}
-                  <span className={
+                  <span className={`relative inline-flex items-center gap-1 ${
                     pathname === link.href
                       ? (isEmployer ? "text-emerald-200 font-medium" : "text-indigo-200 font-medium")
                       : "text-white/60 hover:text-white/90"
-                  }>
+                  }`}>
                     {link.label}
+                    {link.badge && link.badge > 0 && (
+                      <span className="absolute -top-3 -right-4 min-w-[18px] h-[18px] flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1">
+                        {link.badge > 9 ? "9+" : link.badge}
+                      </span>
+                    )}
                   </span>
                 </Link>
               ))}
@@ -76,6 +114,14 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
               </span>
             </div>
           </div>
+
+          {!isEmployer && pendingCount > 0 && (
+            <div className="md:hidden flex items-center gap-1 mr-2">
+              <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                {pendingCount}
+              </span>
+            </div>
+          )}
 
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-white/80 p-2">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,13 +164,18 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`relative flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     pathname === link.href
                       ? isEmployer ? "bg-emerald-800 text-emerald-200" : "bg-indigo-800 text-indigo-200"
                       : "text-white/60 hover:bg-white/10"
                   }`}
                 >
                   {link.label}
+                  {link.badge && link.badge > 0 && (
+                    <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {link.badge > 9 ? "9+" : link.badge}
+                    </span>
+                  )}
                 </Link>
               ))}
               <hr className={`my-2 ${isEmployer ? "border-emerald-800" : "border-indigo-800"}`} />
