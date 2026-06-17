@@ -125,12 +125,33 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <footer className="relative z-10 border-t border-gray-100 py-8 px-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <span className="font-bold text-emerald-600">InCube</span>
-          <div className="flex gap-6 text-sm text-gray-500">
-            <Link href="/login">Connexion</Link>
-            <Link href="/signup">Inscription</Link>
+      <footer className="relative z-10 border-t border-gray-100 py-12 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <span className="font-bold text-emerald-600 text-lg">InCube</span>
+              <p className="text-sm text-gray-500 mt-2">Plateforme de matching équitable entre développeurs juniors et employeurs.</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-sm text-gray-700 mb-3">Navigation</h4>
+              <div className="flex flex-col gap-2 text-sm text-gray-500">
+                <Link href="/login">Connexion</Link>
+                <Link href="/signup">Inscription</Link>
+                <a href="#how-it-works">Comment ça marche</a>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-sm text-gray-700 mb-3">Mentions légales</h4>
+              <div className="text-sm text-gray-500 space-y-1">
+                <p>InCube SAS</p>
+                <p>SIRET : 999 999 999 00012</p>
+                <p>RCS Paris</p>
+                <p>N° TVA : FR999999999</p>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
+            © 2026 InCube. Tous droits réservés. | <a href="#" className="hover:text-gray-600">CGV</a> · <a href="#" className="hover:text-gray-600">Politique de confidentialité</a>
           </div>
         </div>
       </footer>
