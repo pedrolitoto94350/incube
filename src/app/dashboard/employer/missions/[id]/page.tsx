@@ -80,6 +80,14 @@ export default function MissionDetailPage() {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
+    // Check if employer has a card
+    const { data: profile } = await supabase.from("profiles").select("stripe_payment_method_id").eq("id", user!.id).single();
+    if (!profile?.stripe_payment_method_id) {
+      setError("💳 Vous devez d'abord enregistrer une carte dans votre profil pour proposer une mission.");
+      setProposing(null);
+      return;
+    }
+
     // Check if already proposed
     const { data: existing } = await supabase
       .from("matches")

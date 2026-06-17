@@ -63,6 +63,18 @@ export default function EmployerDashboard() {
       <DashboardNav role="employer" />
       <div className="max-w-5xl mx-auto px-4 pt-28 pb-12">
         {/* Header */}
+        {/* Missing card banner */}
+        {!profile?.stripe_payment_method_id && (
+          <div className="mb-6 p-4 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 flex items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold text-amber-800">💳 Carte bleue requise</p>
+              <p className="text-sm text-amber-700">Vous ne pouvez pas proposer de mission sans carte enregistrée. Ajoutez-la dans votre profil.</p>
+            </div>
+            <Link href="/dashboard/employer/profile" className="shrink-0 px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors whitespace-nowrap">
+              Ajouter →
+            </Link>
+          </div>
+        )}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
