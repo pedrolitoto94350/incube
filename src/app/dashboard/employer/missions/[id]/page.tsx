@@ -50,9 +50,10 @@ export default function MissionDetailPage() {
       if (mErr || !mData) { setError("Mission introuvable"); setLoading(false); return; }
       setMission(mData);
 
-      // Fetch all dev profiles
-      const { data: pData } = await supabase.from("profiles").select("*").eq("role", "dev");
-      if (pData) {
+      // Fetch all dev profiles via API (bypass RLS)
+      const res = await fetch("/api/devs");
+      const pData = await res.json();
+      if (Array.isArray(pData) && pData.length > 0) {
         // Fetch proposals to filter
         const { data: propData } = await supabase
           .from("matches")
