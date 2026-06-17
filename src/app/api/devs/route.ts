@@ -2,15 +2,33 @@ import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://ekkwecomikucablccucv.supabase.co"
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
 
 export async function GET() {
+  // Try with both keys
+  const keys = [
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  ].filter(Boolean) as string[]
+
+  for (const key of keys) {
+    try {
+      const supabase = createClient(supabaseUrl, key)
+      const { data } = await supabase.from("profiles").select("id,full_name,skills,role").eq("role", "dev")
+      if (data && data.length > 0) {
+        return NextResponse.json(data)
+      }
+    } catch {}
+  }
+
+  // Fallback: direct REST call
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey)
-    const { data, error } = await supabase.from("profiles").select("*").eq("role", "dev")
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
-    }
+    const res = await fetch(`${supabaseUrl}/rest/v1/profiles?select=id,full_name,skills,role&role=eq.dev`, {
+      headers: {
+        "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+        "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""}`,
+      },
+    })
+    const data = await res.json()
     return NextResponse.json(data || [])
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
