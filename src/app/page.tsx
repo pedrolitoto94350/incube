@@ -143,15 +143,14 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-sm text-gray-700 mb-3">Mentions légales</h4>
               <div className="text-sm text-gray-500 space-y-1">
-                <p>InCube SAS</p>
-                <p>SIRET : 999 999 999 00012</p>
+                <p>SIRET 104 549 001 00014</p>
                 <p>RCS Paris</p>
-                <p>N° TVA : FR999999999</p>
+                <p>N° TVA : FR104549001</p>
               </div>
             </div>
           </div>
           <div className="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
-            © 2026 InCube. Tous droits réservés. | <a href="#" className="hover:text-gray-600">CGV</a> · <a href="#" className="hover:text-gray-600">Politique de confidentialité</a>
+            Propulsé par <a href="https://micheledouard.fr" className="hover:text-gray-600 underline">Micheledouard.fr</a> · © 2026 Tous droits réservés
           </div>
         </div>
       </footer>
