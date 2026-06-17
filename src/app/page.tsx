@@ -46,10 +46,10 @@ function FloatingCard({ children, delay }: { children: React.ReactNode; delay: n
 }
 
 const steps = [
-  { number: "01", title: "Inscrivez-vous", desc: "Développeur ou employeur, créez votre profil en 2 minutes.", color: "from-indigo-500 to-purple-500" },
-  { number: "02", title: "Matching aléatoire", desc: "Découvrez des talents sans CV, sans biais.", color: "from-purple-500 to-pink-500" },
-  { number: "03", title: "Match & échangez", desc: "Si les deux sont intéressés, les contacts sont débloqués.", color: "from-pink-500 to-rose-500" },
-  { number: "04", title: "Mission accomplie", desc: "Commission unique plafonnée à 300€.", color: "from-rose-500 to-emerald-500" },
+  { number: "01", title: "Inscrivez-vous", desc: "Développeur ou employeur, créez votre profil en 2 minutes.", color: "from-emerald-500 to-teal-500" },
+  { number: "02", title: "Matching aléatoire", desc: "Découvrez des talents sans CV, sans biais.", color: "from-teal-500 to-cyan-500" },
+  { number: "03", title: "Match & échangez", desc: "Si les deux sont intéressés, les contacts sont débloqués.", color: "from-cyan-500 to-blue-500" },
+  { number: "04", title: "Mission accomplie", desc: "Commission unique plafonnée à 300€.", color: "from-blue-500 to-indigo-500" },
 ];
 
 export default function Home() {
