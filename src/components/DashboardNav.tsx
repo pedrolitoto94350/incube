@@ -13,8 +13,6 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isEmployer = role === "employer";
-  const accentColor = isEmployer ? "emerald" : "indigo";
-  const accentGradient = isEmployer ? "from-emerald-500 to-teal-600" : "from-indigo-600 to-purple-600";
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -37,56 +35,61 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
 
   const links = isEmployer ? employerLinks : devLinks;
 
-  // Badge color
-  const badgeBg = isEmployer ? "bg-emerald-100 text-emerald-700" : "bg-indigo-100 text-indigo-700";
-  const badgeLabel = isEmployer ? "🏢 Employeur" : "👨‍💻 Dev";
-  const indicatorColor = isEmployer ? "bg-emerald-500" : "bg-indigo-600";
-
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b ${isEmployer ? "border-emerald-100" : "border-purple-100"}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md ${
+        isEmployer
+          ? "bg-emerald-950 text-emerald-100 border-emerald-800"
+          : "bg-indigo-950 text-indigo-100 border-indigo-800"
+      }`}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link href="/" className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">InCube</Link>
-
-            {/* Role badge */}
-            <span className={`hidden md:inline-flex text-xs px-3 py-1 rounded-full font-semibold ${badgeBg}`}>
-              {badgeLabel}
-            </span>
-
+            <Link href="/" className={`font-bold text-lg ${
+              isEmployer ? "text-emerald-300" : "text-indigo-300"
+            }`}>InCube</Link>
             <div className="hidden md:flex items-center gap-6">
               {links.map((link) => (
                 <Link key={link.href} href={link.href} className="relative text-sm">
                   {pathname === link.href && (
-                    <motion.div layoutId="nav" className={`absolute -bottom-[17px] left-0 right-0 h-0.5 ${indicatorColor}`} />
+                    <motion.div
+                      layoutId="nav"
+                      className={`absolute -bottom-[17px] left-0 right-0 h-0.5 ${
+                        isEmployer ? "bg-emerald-400" : "bg-indigo-400"
+                      }`}
+                    />
                   )}
-                  <span className={pathname === link.href
-                    ? `${isEmployer ? "text-emerald-600" : "text-indigo-600"} font-medium`
-                    : "text-gray-600 hover:text-gray-900"}
-                  >
+                  <span className={
+                    pathname === link.href
+                      ? (isEmployer ? "text-emerald-200 font-medium" : "text-indigo-200 font-medium")
+                      : "text-white/60 hover:text-white/90"
+                  }>
                     {link.label}
                   </span>
                 </Link>
               ))}
+              <span className={`ml-4 text-xs px-3 py-1 rounded-xl font-bold tracking-wider uppercase ${
+                isEmployer
+                  ? "bg-emerald-800 text-emerald-200"
+                  : "bg-indigo-800 text-indigo-200"
+              }`}>
+                {isEmployer ? "🏢 EMPLOYEUR" : "👨‍💻 DEV"}
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Mobile badge + burger */}
-            <span className={`md:hidden text-xs px-2.5 py-1 rounded-full font-semibold ${badgeBg}`}>
-              {badgeLabel}
-            </span>
-            <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-gray-600 p-2">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {menuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-            <button onClick={handleLogout} className="hidden md:block text-sm text-gray-500 hover:text-red-600 transition-colors">Déconnexion</button>
-          </div>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-white/80 p-2">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {menuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
+          <button onClick={handleLogout} className={`hidden md:block text-sm ${
+            isEmployer ? "text-emerald-300 hover:text-emerald-100" : "text-indigo-300 hover:text-indigo-100"
+          } transition-colors`}>Déconnexion</button>
         </div>
       </nav>
 
@@ -96,9 +99,20 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="fixed top-16 left-0 right-0 z-50 md:hidden bg-white border-b border-gray-100 shadow-lg"
+            className={`fixed top-16 left-0 right-0 z-50 md:hidden shadow-lg border-b ${
+              isEmployer
+                ? "bg-emerald-950 border-emerald-800"
+                : "bg-indigo-950 border-indigo-800"
+            }`}
           >
             <div className="px-4 py-3 space-y-1">
+              <div className={`text-xs px-3 py-2 rounded-xl font-bold tracking-wider uppercase text-center mb-2 ${
+                isEmployer
+                  ? "bg-emerald-800 text-emerald-200"
+                  : "bg-indigo-800 text-indigo-200"
+              }`}>
+                {isEmployer ? "🏢 EMPLOYEUR" : "👨‍💻 DEV"}
+              </div>
               {links.map((link) => (
                 <Link
                   key={link.href}
@@ -106,15 +120,15 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
                   onClick={() => setMenuOpen(false)}
                   className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     pathname === link.href
-                      ? isEmployer ? "bg-emerald-50 text-emerald-700" : "bg-indigo-50 text-indigo-700"
-                      : "text-gray-600 hover:bg-gray-50"
+                      ? isEmployer ? "bg-emerald-800 text-emerald-200" : "bg-indigo-800 text-indigo-200"
+                      : "text-white/60 hover:bg-white/10"
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
-              <hr className="my-2 border-gray-100" />
-              <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm text-red-600 hover:bg-red-50 font-medium transition-all">
+              <hr className={`my-2 ${isEmployer ? "border-emerald-800" : "border-indigo-800"}`} />
+              <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm text-red-400 hover:bg-red-900/30 font-medium transition-all">
                 🚪 Déconnexion
               </button>
             </div>

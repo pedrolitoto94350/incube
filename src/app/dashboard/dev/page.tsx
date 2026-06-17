@@ -54,7 +54,7 @@ export default function DevDashboard() {
   const skills = parseSkills(profile.skills);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50/40 via-white to-purple-50/40">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <DashboardNav role="dev" />
       <div className="max-w-5xl mx-auto px-4 pt-28 pb-12">
         {/* Header avec bienvenue */}

@@ -59,7 +59,7 @@ export default function EmployerDashboard() {
   const matchedMissions = missions.filter(m => m.status === "matched").length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50/40 via-white to-teal-50/40">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
       <DashboardNav role="employer" />
       <div className="max-w-5xl mx-auto px-4 pt-28 pb-12">
         {/* Header */}
