@@ -81,10 +81,18 @@ export default function Home() {
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
             InCube connecte développeurs juniors français avec employeurs européens. Matching aléatoire, zéro CV, zéro engagement.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Link href="/signup/dev" className="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-lg hover:shadow-xl hover:shadow-emerald-200 transition-all">Je suis développeur</Link>
             <Link href="/signup/employer" className="px-8 py-4 rounded-2xl bg-white border-2 border-gray-200 text-gray-700 font-semibold text-lg hover:border-emerald-300 transition-all">Je recrute</Link>
           </div>
+
+          {/* Hero video */}
+          <motion.div className="max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-gray-100" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}>
+            <video className="w-full" controls autoPlay muted loop playsInline poster="">
+              <source src="https://drive.google.com/uc?export=download&id=1LIaaz3uZsXIao7ZDoMN9ITRpFVXetPgo" type="video/mp4" />
+              Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+          </motion.div>
         </motion.div>
       </section>
       <section id="how-it-works" className="relative z-10 py-32 px-6">
