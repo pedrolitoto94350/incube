@@ -11,38 +11,60 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [pendingCount, setPendingCount] = useState(0);
+  const [devPendingCount, setDevPendingCount] = useState(0);
+  const [employerAcceptedCount, setEmployerAcceptedCount] = useState(0);
 
   const isEmployer = role === "employer";
 
-  // Fetch pending proposals for devs
   useEffect(() => {
-    if (isEmployer) return;
     const fetchPending = async () => {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const { count } = await supabase
-        .from("matches")
-        .select("id", { count: "exact", head: true })
-        .eq("dev_id", user.id)
-        .eq("status", "proposed");
-      setPendingCount(count || 0);
 
-      // Subscribe to new matches (real-time)
-      const channel = supabase
-        .channel("dev-matches")
-        .on("postgres_changes", {
-          event: "INSERT",
-          schema: "public",
-          table: "matches",
-          filter: `dev_id=eq.${user.id}`,
-        }, () => {
-          setPendingCount((prev) => prev + 1);
-        })
-        .subscribe();
+      if (!isEmployer) {
+        // Dev : nombre de propositions en attente
+        const { count } = await supabase
+          .from("matches")
+          .select("id", { count: "exact", head: true })
+          .eq("dev_id", user.id)
+          .eq("status", "proposed");
+        setDevPendingCount(count || 0);
 
-      return () => supabase.removeChannel(channel);
+        const channel = supabase
+          .channel("dev-matches")
+          .on("postgres_changes", {
+            event: "INSERT",
+            schema: "public",
+            table: "matches",
+            filter: `dev_id=eq.${user.id}`,
+          }, () => {
+            setDevPendingCount((prev) => prev + 1);
+          })
+          .subscribe();
+      } else {
+        // Employer : nombre de matchs acceptés/refusés récents
+        const { count } = await supabase
+          .from("matches")
+          .select("id", { count: "exact", head: true })
+          .eq("employer_id", user.id)
+          .in("status", ["matched", "cancelled"]);
+        setEmployerAcceptedCount(count || 0);
+
+        const channel = supabase
+          .channel("employer-matches")
+          .on("postgres_changes", {
+            event: "UPDATE",
+            schema: "public",
+            table: "matches",
+            filter: `employer_id=eq.${user.id}`,
+          }, (payload) => {
+            if (payload.new.status === "matched" || payload.new.status === "cancelled") {
+              setEmployerAcceptedCount((prev) => prev + 1);
+            }
+          })
+          .subscribe();
+      }
     };
     fetchPending();
   }, [isEmployer]);
@@ -55,13 +77,13 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
 
   const devLinks: { href: string; label: string; badge?: number }[] = [
     { href: "/dashboard/dev", label: "📊 Dashboard" },
-    { href: "/dashboard/dev/matches", label: "🤝 Mes matches", badge: pendingCount },
+    { href: "/dashboard/dev/matches", label: "🤝 Mes matches", badge: devPendingCount },
     { href: "/dashboard/dev/profile", label: "👤 Mon profil" },
   ];
 
   const employerLinks: { href: string; label: string; badge?: number }[] = [
     { href: "/dashboard/employer", label: "📊 Dashboard" },
-    { href: "/dashboard/employer/missions", label: "📋 Mes missions" },
+    { href: "/dashboard/employer/missions", label: "📋 Mes missions", badge: employerAcceptedCount },
     { href: "/dashboard/employer/create-mission", label: "➕ Nouvelle mission" },
     { href: "/dashboard/employer/profile", label: "👤 Mon profil" },
   ];
@@ -115,10 +137,10 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
             </div>
           </div>
 
-          {!isEmployer && pendingCount > 0 && (
+          {(devPendingCount > 0) && (
             <div className="md:hidden flex items-center gap-1 mr-2">
               <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                {pendingCount}
+                {devPendingCount}
               </span>
             </div>
           )}
