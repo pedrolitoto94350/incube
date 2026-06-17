@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabaseUrl = "https://ekkwecomikucablccucv.supabase.co"
 
 export async function GET() {
-  const supabase = createClient(supabaseUrl, supabaseServiceKey)
-  const { data } = await supabase.from("profiles").select("*").eq("role", "dev")
-  return NextResponse.json(data || [])
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  const response = await fetch(`${supabaseUrl}/rest/v1/profiles?select=*&role=eq.dev`, {
+    headers: {
+      "apikey": anonKey || "",
+      "Authorization": `Bearer ${anonKey || ""}`,
+    },
+  })
+  const data = await response.json()
+  return NextResponse.json(data)
 }
