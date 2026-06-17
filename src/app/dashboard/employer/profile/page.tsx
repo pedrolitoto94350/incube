@@ -81,11 +81,13 @@ export default function EmployerEditProfile() {
         setHasCard(!!data.stripe_payment_method_id);
       }
       // Create setup intent
-      const res = await fetch("/api/stripe/setup-intent", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
-      const json = await res.json();
-      setClientSecret(json.clientSecret);
+      try {
+        const res = await fetch("/api/stripe/setup-intent", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+        const json = await res.json();
+        if (json.clientSecret) setClientSecret(json.clientSecret);
+      } catch (e) {}
       setLoading(false);
-    })();
+    })().catch(() => setLoading(false));
   }, [router]);
 
   const saveProfile = async () => {
