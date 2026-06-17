@@ -113,10 +113,13 @@ export default function MissionDetailPage() {
       return false;
     }
 
-    // Skill filter
+    // Skill filter - requiert au moins une compétence sélectionnée
     if (selectedSkills.length > 0) {
       const hasSkill = selectedSkills.some((s) => skills.includes(s));
       if (!hasSkill) return false;
+    } else {
+      // Aucune compétence sélectionnée = ne rien afficher
+      return false;
     }
 
     return true;
@@ -199,6 +202,7 @@ export default function MissionDetailPage() {
 
           {(selectedSkills.length > 0) && (
             <div className="flex flex-wrap gap-1.5">
+              <span className="text-xs text-gray-400 mr-1">Filtres actifs :</span>
               {selectedSkills.map((s) => (
                 <span key={s} className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md font-medium">
                   {s}
@@ -209,12 +213,15 @@ export default function MissionDetailPage() {
           )}
         </div>
 
-        {/* Debug info */}
-        <div className="text-xs text-gray-400 mb-2">{profiles.length} devs chargés · {filteredProfiles.length} filtrés · {selectedSkills.length} filtre(s) actif(s)</div>
-
         {/* Results */}
         <div className="space-y-4">
-          {filteredProfiles.length === 0 && (
+          {selectedSkills.length === 0 && (
+            <div className="bg-white rounded-xl border border-dashed border-gray-200 p-10 text-center">
+              <p className="text-gray-400 font-medium">🔍 Sélectionnez des compétences</p>
+              <p className="text-gray-400 text-sm mt-1">Cliquez sur "Filtrer par compétences" pour trouver des développeurs</p>
+            </div>
+          )}
+          {selectedSkills.length > 0 && filteredProfiles.length === 0 && (
             <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
               <p className="text-gray-500">Aucun développeur trouvé</p>
               <p className="text-gray-400 text-sm mt-1">Modifiez vos filtres pour élargir la recherche</p>
