@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CookieConsentBanner from "@/components/CookieConsent";
 
 export const metadata: Metadata = {
   title: "InCube — Le matching équitable devs & missions",
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased bg-gray-50 text-gray-900 min-h-screen">
         {children}
+        <CookieConsentBanner />
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import { CookieFooterLink } from "@/components/CookieConsent";
 
 function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -208,6 +209,9 @@ export default function Home() {
                 <p>SIRET 104 549 001 00014</p>
                 <p>RCS Paris</p>
                 <p>N° TVA : FR104549001</p>
+              </div>
+              <div className="mt-3">
+                <CookieFooterLink onOpen={() => {}} />
               </div>
             </div>
           </div>
