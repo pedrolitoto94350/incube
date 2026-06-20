@@ -83,7 +83,7 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
 
   const employerLinks: { href: string; label: string; badge?: number }[] = [
     { href: "/dashboard/employer", label: "📊 Dashboard" },
-    { href: "/dashboard/employer/missions", label: "📋 Mes missions", badge: employerAcceptedCount },
+    { href: "/dashboard/employer/missions", label: "📋 Mes missions", badge: employerAcceptedCount > 0 ? employerAcceptedCount : undefined },
     { href: "/dashboard/employer/create-mission", label: "➕ Nouvelle mission" },
     { href: "/dashboard/employer/profile", label: "👤 Mon profil" },
   ];
