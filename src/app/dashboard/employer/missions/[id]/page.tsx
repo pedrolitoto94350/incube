@@ -255,7 +255,7 @@ export default function MissionDetailPage() {
           {filteredProfiles.map((profile) => {
             const skills = parseSkills(profile.skills);
             const devNum = profile.dev_number || parseInt(profile.full_name?.replace(/[^0-9]/g, '') || '0', 10) || 0;
-            const profilePath = devNum ? `/profile/dev/${devNum}` : '#';
+            const profilePath = devNum ? `/profile/dev/${devNum}?missionId=${missionId}` : '#';
             return (
               <div key={profile.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:border-indigo-200 transition-all">
                 <div className="flex items-start justify-between">

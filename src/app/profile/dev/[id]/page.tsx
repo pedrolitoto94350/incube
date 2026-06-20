@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState, useCallback } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import Link from "next/link";
 
@@ -34,7 +34,9 @@ function classNames(...classes: (string | boolean | undefined | null)[]): string
 export default function DevProfilePublicPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const devNumber = params.id as string;
+  const missionFromUrl = searchParams.get("missionId") || "";
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -42,7 +44,8 @@ export default function DevProfilePublicPage() {
   const [user, setUser] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [missions, setMissions] = useState<any[]>([]);
-  const [selectedMission, setSelectedMission] = useState("");
+  const [selectedMission, setSelectedMission] = useState(missionFromUrl);
+  const [mission, setMission] = useState<any>(null);
   const [proposing, setProposing] = useState(false);
   const [proposed, setProposed] = useState(false);
 
@@ -78,6 +81,18 @@ export default function DevProfilePublicPage() {
             .eq("employer_id", currentUser.id)
             .in("status", ["open", "proposed"]);
           if (mData) setMissions(mData);
+
+          // Si missionId dans l'URL, récupérer la mission directement
+          if (missionFromUrl) {
+            setSelectedMission(missionFromUrl);
+            const { data: missionData } = await supabase
+              .from("matches")
+              .select("id, title, description, project_type, budget")
+              .eq("id", missionFromUrl)
+              .eq("employer_id", currentUser.id)
+              .single();
+            if (missionData) setMission(missionData);
+          }
 
           // Vérifier si déjà proposé
           const { data: existing } = await supabase
@@ -262,6 +277,53 @@ export default function DevProfilePublicPage() {
                 <p className="text-green-700 font-medium">✅ Proposition déjà envoyée à ce développeur</p>
                 <p className="text-green-600 text-sm mt-1">En attente de sa réponse</p>
               </div>
+            </div>
+          // Si mission déjà identifiée via l'URL, affichage direct sans sélecteur
+          ) : missionFromUrl && mission ? (
+            <div className="max-w-lg mx-auto bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <h3 className="font-semibold text-gray-900 mb-1">📩 Proposer une mission</h3>
+              <p className="text-sm text-gray-500 mb-4">
+                <strong>{mission.title || "Mission"}</strong>
+                {mission.budget && ` · ${mission.budget}€ · `}
+                {mission.project_type && ` · ${mission.project_type}`}
+              </p>
+              <button
+                onClick={async () => {
+                  setProposing(true);
+                  setProposalError("");
+                  const supabase = createClient();
+
+                  const { data: employerProf } = await supabase.from("profiles").select("stripe_payment_method_id").eq("id", user.id).single();
+                  if (!employerProf?.stripe_payment_method_id) {
+                    setProposalError("💳 Enregistrez d'abord une carte dans votre profil");
+                    setProposing(false);
+                    return;
+                  }
+
+                  const { error: err } = await supabase.from("matches").insert({
+                    employer_id: user.id,
+                    dev_id: profile.id,
+                    title: mission.title,
+                    description: mission.description,
+                    project_type: mission.project_type,
+                    budget: mission.budget,
+                    status: "proposed",
+                  });
+
+                  if (err) {
+                    setProposalError(err.message?.includes("duplicate") ? "Proposition déjà envoyée" : err.message);
+                  } else {
+                    setProposed(true);
+                  }
+                  setProposing(false);
+                }}
+                disabled={proposing}
+                className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {proposing ? "Envoi..." : `Proposer cette mission à ${devLabel} →`}
+              </button>
+              {proposalError && <p className="text-sm text-red-600 mt-2">{proposalError}</p>}
+              <p className="text-xs text-gray-400 mt-2">Pas la bonne mission ? <Link href={`/dashboard/employer/missions`} className="text-indigo-500 hover:underline">Voir mes missions</Link></p>
             </div>
           ) : missions.length === 0 ? (
             <div className="max-w-md mx-auto">
