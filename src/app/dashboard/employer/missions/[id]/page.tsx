@@ -254,14 +254,19 @@ export default function MissionDetailPage() {
           )}
           {filteredProfiles.map((profile) => {
             const skills = parseSkills(profile.skills);
+            const devNum = profile.dev_number || parseInt(profile.full_name?.replace(/[^0-9]/g, '') || '0', 10) || 0;
+            const profilePath = devNum ? `/profile/dev/${devNum}` : '#';
             return (
               <div key={profile.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:border-indigo-200 transition-all">
                 <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg">Développeur·se 👨‍💻</h3>
+                  <Link href={profilePath} className="flex-1 group">
+                    <h3 className="font-semibold text-lg group-hover:text-indigo-600 transition-colors">
+                      {devNum ? `Dev#${String(devNum).padStart(3, '0')}` : '👨‍💻 Développeur·se'}
+                    </h3>
                     <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
                       {profile.english_level && <span>🌍 {profile.english_level}</span>}
-                      {profile.availability && <span>⏰ {profile.availability}</span>}
+                      {profile.daily_rate && <span>💰 {profile.daily_rate}€/j</span>}
+                      {profile.availability && <span>⏰ {profile.availability === 'disponible' ? 'Disponible' : profile.availability === '1-2_semaines' ? 'Sous 1-2 sem' : 'Sous 3-4 sem'}</span>}
                     </div>
                     <div className="flex flex-wrap gap-1.5 mt-3">
                       {skills.map((skill: string) => (
@@ -269,12 +274,13 @@ export default function MissionDetailPage() {
                       ))}
                     </div>
                     {profile.bio && <p className="text-sm text-gray-600 mt-3 line-clamp-2">{profile.bio}</p>}
-                  </div>
+                    <span className="text-xs text-indigo-500 mt-2 inline-block opacity-0 group-hover:opacity-100 transition-opacity">Voir le profil complet →</span>
+                  </Link>
                   <button
                     onClick={() => proposeMission(profile.id)}
                     disabled={proposing === profile.id || profile.already_proposed}
                     className={classNames(
-                      "ml-4 px-5 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap",
+                      "ml-4 px-5 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap shrink-0",
                       profile.already_proposed
                         ? "bg-green-50 text-green-700 border border-green-200 cursor-default"
                         : "bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"

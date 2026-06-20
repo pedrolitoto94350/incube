@@ -13,7 +13,7 @@ export async function GET() {
   for (const key of keys) {
     try {
       const supabase = createClient(supabaseUrl, key)
-      const { data } = await supabase.from("profiles").select("id,full_name,skills,role").eq("role", "dev")
+      const { data } = await supabase.from("profiles").select("id,full_name,dev_number,skills,bio,daily_rate,availability,english_level,role").eq("role", "dev")
       if (data && data.length > 0) {
         return NextResponse.json(data)
       }
