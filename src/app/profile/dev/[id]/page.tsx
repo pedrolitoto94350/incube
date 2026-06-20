@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import Link from "next/link";
 
@@ -32,17 +32,27 @@ function classNames(...classes: (string | boolean | undefined | null)[]): string
 }
 
 export default function DevProfilePublicPage() {
+  const router = useRouter();
   const params = useParams();
   const devNumber = params.id as string;
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [proposalError, setProposalError] = useState("");
+  const [user, setUser] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [missions, setMissions] = useState<any[]>([]);
+  const [selectedMission, setSelectedMission] = useState("");
+  const [proposing, setProposing] = useState(false);
+  const [proposed, setProposed] = useState(false);
 
   useEffect(() => {
     (async () => {
       const supabase = createClient();
       const num = parseInt(devNumber, 10);
       if (isNaN(num)) { setError("Profil introuvable"); setLoading(false); return; }
+
+      // Récupérer le profil dev
       const { data, error: err } = await supabase
         .from("profiles")
         .select("*")
@@ -52,6 +62,33 @@ export default function DevProfilePublicPage() {
 
       if (err || !data) { setError("Profil introuvable"); setLoading(false); return; }
       setProfile(data);
+
+      // Vérifier si un employer est connecté
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (currentUser) {
+        setUser(currentUser);
+        const { data: uProf } = await supabase.from("profiles").select("*").eq("id", currentUser.id).single();
+        setUserProfile(uProf);
+
+        if (uProf?.role === "employer") {
+          // Récupérer ses missions ouvertes
+          const { data: mData } = await supabase
+            .from("matches")
+            .select("id, title, status")
+            .eq("employer_id", currentUser.id)
+            .in("status", ["open", "proposed"]);
+          if (mData) setMissions(mData);
+
+          // Vérifier si déjà proposé
+          const { data: existing } = await supabase
+            .from("matches")
+            .select("id")
+            .eq("employer_id", currentUser.id)
+            .eq("dev_id", data.id);
+          if (existing && existing.length > 0) setProposed(true);
+        }
+      }
+
       setLoading(false);
     })();
   }, [devNumber]);
@@ -203,17 +240,100 @@ export default function DevProfilePublicPage() {
           </div>
         )}
 
-        {/* Footer action */}
+        {/* Footer action — Proposer une mission */}
         <div className="text-center py-8">
-          <p className="text-sm text-gray-400 mb-4">
-            Intéressé par ce profil ? Connectez-vous pour proposer une mission.
-          </p>
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all"
-          >
-            🔑 Espace recruteur
-          </Link>
+          {!user ? (
+            <>
+              <p className="text-sm text-gray-400 mb-4">
+                Intéressé par ce profil ? Connectez-vous pour proposer une mission.
+              </p>
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all"
+              >
+                🔑 Espace recruteur
+              </Link>
+            </>
+          ) : userProfile?.role !== "employer" ? (
+            <p className="text-sm text-gray-400">Connecté en tant que développeur · <Link href="/dashboard/dev" className="text-indigo-600 hover:underline">Mon tableau de bord</Link></p>
+          ) : proposed ? (
+            <div className="max-w-md mx-auto">
+              <div className="p-6 bg-green-50 border border-green-200 rounded-2xl">
+                <p className="text-green-700 font-medium">✅ Proposition déjà envoyée à ce développeur</p>
+                <p className="text-green-600 text-sm mt-1">En attente de sa réponse</p>
+              </div>
+            </div>
+          ) : missions.length === 0 ? (
+            <div className="max-w-md mx-auto">
+              <div className="p-6 bg-amber-50 border border-amber-200 rounded-2xl">
+                <p className="text-amber-700 font-medium">📝 Créez d&apos;abord une mission</p>
+                <p className="text-amber-600 text-sm mt-1 mb-3">Vous devez avoir une mission active pour proposer à ce développeur.</p>
+                <Link
+                  href="/dashboard/employer/create-mission"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all"
+                >
+                  Créer une mission
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-lg mx-auto bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <h3 className="font-semibold text-gray-900 mb-3">📩 Proposer une mission à {devLabel}</h3>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <select
+                  value={selectedMission}
+                  onChange={(e) => setSelectedMission(e.target.value)}
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:border-indigo-400 outline-none text-sm bg-white"
+                >
+                  <option value="">Choisir une mission...</option>
+                  {missions.map((m) => (
+                    <option key={m.id} value={m.id}>{m.title || "Mission sans titre"}</option>
+                  ))}
+                </select>
+                <button
+                  onClick={async () => {
+                    if (!selectedMission) return;
+                    setProposing(true);
+                    const supabase = createClient();
+
+                    // Vérifier la carte
+                    const { data: employerProf } = await supabase.from("profiles").select("stripe_payment_method_id").eq("id", user.id).single();
+                    if (!employerProf?.stripe_payment_method_id) {
+                      setProposalError("💳 Enregistrez d'abord une carte dans votre profil");
+                      setProposing(false);
+                      return;
+                    }
+
+                    // Récupérer la mission séléctionnée
+                    const { data: mission } = await supabase.from("matches").select("*").eq("id", selectedMission).single();
+                    if (!mission) { setProposing(false); return; }
+
+                    const { error: err } = await supabase.from("matches").insert({
+                      employer_id: user.id,
+                      dev_id: profile.id,
+                      title: mission.title,
+                      description: mission.description,
+                      project_type: mission.project_type,
+                      budget: mission.budget,
+                      status: "proposed",
+                    });
+
+                    if (err) {
+                      setProposalError(err.message?.includes("duplicate") ? "Proposition déjà envoyée" : err.message);
+                    } else {
+                      setProposed(true);
+                    }
+                    setProposing(false);
+                  }}
+                  disabled={!selectedMission || proposing}
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium text-sm hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                >
+                  {proposing ? "Envoi..." : "Proposer →"}
+                </button>
+              </div>
+              {proposalError && <p className="text-sm text-red-600 mt-2">{proposalError}</p>}
+            </div>
+          )}
         </div>
 
         {/* Footer légal */}
