@@ -58,12 +58,23 @@ export async function POST(req: NextRequest) {
         const { data } = await query;
         if (!data || data.length === 0) continue;
 
+        // Helper pour parser les skills (string JSON ou array)
+        const parseSkills = (dev: any): string[] => {
+          const raw = dev.skills;
+          if (Array.isArray(raw)) return raw;
+          if (typeof raw === "string") {
+            try { const parsed = JSON.parse(raw); return Array.isArray(parsed) ? parsed : [raw]; }
+            catch { return raw.split(",").map((s: string) => s.trim()).filter(Boolean); }
+          }
+          return [];
+        };
+
         // Filtrer par compétences (si fournies)
         let filtered = data;
         if (skills && Array.isArray(skills) && skills.length > 0) {
-          const lowerSkills = skills.map((s: string) => s.toLowerCase());
+          const lowerSkills = skills.map((s: string) => s.toLowerCase().trim());
           filtered = filtered.filter((dev: any) => {
-            const devSkills: string[] = dev.skills || [];
+            const devSkills = parseSkills(dev);
             return devSkills.some((ds: string) =>
               lowerSkills.some((ls: string) => ds.toLowerCase().includes(ls))
             );
@@ -72,12 +83,14 @@ export async function POST(req: NextRequest) {
 
         // Trier par nombre de compétences matchantes (les plus pertinents en premier)
         if (skills && Array.isArray(skills) && skills.length > 0) {
-          const lowerSkills = skills.map((s: string) => s.toLowerCase());
+          const lowerSkills = skills.map((s: string) => s.toLowerCase().trim());
           filtered.sort((a: any, b: any) => {
-            const aMatch = (a.skills || []).filter((s: string) =>
+            const aSkills = parseSkills(a);
+            const bSkills = parseSkills(b);
+            const aMatch = aSkills.filter((s: string) =>
               lowerSkills.some((ls: string) => s.toLowerCase().includes(ls))
             ).length;
-            const bMatch = (b.skills || []).filter((s: string) =>
+            const bMatch = bSkills.filter((s: string) =>
               lowerSkills.some((ls: string) => s.toLowerCase().includes(ls))
             ).length;
             return bMatch - aMatch;
