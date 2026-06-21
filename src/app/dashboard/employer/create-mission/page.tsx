@@ -342,17 +342,25 @@ export default function CreateMissionPage() {
             className="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-white/50 transition-all">
             ← {step === 1 ? "Annuler" : "Retour"}
           </button>
-          {step < 4 ? (
-            <button onClick={() => setStep(step + 1)} disabled={!canGoNext()}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-              Continuer →
-            </button>
-          ) : (
-            <button onClick={handleSubmit} disabled={loading}
-              className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-50">
-              {loading ? "Publication..." : "✅ Publier la mission"}
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            {step === 3 && (
+              <button onClick={handleSubmit} disabled={loading}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition-all">
+                {loading ? "Publication..." : "⚡ Publier directement"}
+              </button>
+            )}
+            {step < 4 ? (
+              <button onClick={() => { if (step === 3 && matchingDevs.length === 0) { handleSubmit(); return; } setStep(step + 1); }} disabled={!canGoNext()}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                {step === 3 ? "🔍 Voir les devs disponibles →" : "Continuer →"}
+              </button>
+            ) : (
+              <button onClick={handleSubmit} disabled={loading}
+                className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-50">
+                {loading ? "Publication..." : "✅ Publier la mission"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
