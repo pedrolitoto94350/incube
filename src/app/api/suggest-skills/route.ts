@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Appel DeepSeek
-    const prompt = `Tu es un expert technique qui aide des recruteurs à identifier les compétences nécessaires pour leurs projets web. À partir de la description d'un projet, retourne UNIQUEMENT un tableau JSON des compétences techniques pertinentes parmi cette liste : ${SKILLS_LIST.join(", ")}. Choisis entre 3 et 8 compétences maximum.
+    const prompt = `Tu es un expert technique qui aide des recruteurs à identifier les compétences nécessaires pour leurs projets web. À partir de la description d'un projet, retourne UNIQUEMENT un tableau JSON des compétences techniques pertinentes parmi cette liste : ${SKILLS_LIST.join(", ")}. Choisis entre 3 et 5 compétences maximum. Privilégie la qualité à la quantité : ne propose que les compétences vraiment indispensables pour le projet, celles qui sont les plus discriminantes pour trouver le bon développeur.
 
 Description du projet: "${title ? title + " — " : ""}${description}"
 
@@ -93,19 +93,12 @@ Réponds UNIQUEMENT avec un tableau JSON : ["Compétence 1", "Compétence 2", ..
       return allSkillsLower.some((ref) => ref === sl || ref.includes(sl) || sl.includes(ref));
     });
 
-    // Si on a "stripe" mais pas "Stripe API", on ajoute Stripe API
-    const enriched = [...valid];
-    const validLower = valid.map((s: string) => s.toLowerCase());
-    for (const skill of SKILLS_LIST) {
-      const sl = skill.toLowerCase();
-      if (!validLower.some((v) => v.includes(sl) || sl.includes(v))) continue;
-      if (!enriched.includes(skill)) enriched.push(skill);
-    }
-
+    // Limiter à 5 compétences max
     const fallback = FALLBACK_MAP[description.toLowerCase().slice(0, 20)];
-    const final = enriched.length >= 2 ? enriched : (fallback || ["React", "Node.js", "Tailwind CSS"]);
-
-    return NextResponse.json({ skills: final });
+    if (valid.length < 2) {
+      return NextResponse.json({ skills: fallback ? fallback.slice(0, 5) : ["React", "Node.js", "Tailwind CSS"] });
+    }
+    return NextResponse.json({ skills: valid.slice(0, 5) });
   } catch (error) {
     console.error("Suggest skills error:", error);
     return NextResponse.json({ error: "Erreur lors de l'analyse" }, { status: 500 });
