@@ -26,7 +26,7 @@ const PROJECT_TYPE_SUGGESTIONS = [
 export default function CreateMissionPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ title: "", description: "", project_type: "", budget: "" });
+  const [form, setForm] = useState({ title: "", description: "", project_type: [] as string[], budget: "" });
   const [skills, setSkills] = useState<string[]>([]);
   const [suggestedSkills, setSuggestedSkills] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState("");
@@ -104,7 +104,7 @@ export default function CreateMissionPage() {
       employer_id: user.id,
       title: form.title,
       description: form.description,
-      project_type: form.project_type,
+      project_type: form.project_type.join(", "),
       budget: form.budget ? parseInt(form.budget) : null,
       required_skills: skills,
       status: "open",
@@ -231,20 +231,44 @@ export default function CreateMissionPage() {
             </div>
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700">Type de projet</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700">Type(s) de projet</label>
+                <p className="text-xs text-gray-400 mb-3">Sélectionnez un ou plusieurs types</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {PROJECT_TYPE_SUGGESTIONS.map((pt) => (
-                    <button key={pt.label} onClick={() => setForm({ ...form, project_type: pt.label })}
-                      className={`p-4 rounded-xl border text-left transition-all ${
-                        form.project_type === pt.label ? "border-emerald-500 bg-emerald-50 ring-1 ring-emerald-500" : "border-gray-200 hover:border-emerald-300 bg-white"
-                      }`}>
-                      <span className="font-medium text-sm text-gray-900">{pt.label}</span>
-                      <p className="text-xs text-gray-500 mt-0.5">{pt.desc}</p>
-                    </button>
-                  ))}
+                  {PROJECT_TYPE_SUGGESTIONS.map((pt) => {
+                    const selected = form.project_type.includes(pt.label);
+                    return (
+                      <button key={pt.label} type="button" onClick={() => {
+                        setForm({
+                          ...form,
+                          project_type: selected
+                            ? form.project_type.filter((t) => t !== pt.label)
+                            : [...form.project_type, pt.label],
+                        });
+                      }}
+                        className={`p-4 rounded-xl border text-left transition-all ${
+                          selected ? "border-emerald-500 bg-emerald-50 ring-1 ring-emerald-500" : "border-gray-200 hover:border-emerald-300 bg-white"
+                        }`}>
+                        <div className="flex items-center gap-3">
+                          <div className={`w-5 h-5 rounded flex items-center justify-center border-2 transition-all ${
+                            selected ? "bg-emerald-500 border-emerald-500 text-white" : "border-gray-300"
+                          }`}>
+                            {selected && <span className="text-xs font-bold">✓</span>}
+                          </div>
+                          <div>
+                            <span className="font-medium text-sm text-gray-900">{pt.label}</span>
+                            <p className="text-xs text-gray-500 mt-0.5">{pt.desc}</p>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
-                {form.project_type && (
-                  <p className="text-xs text-emerald-600 mt-2">✓ Type sélectionné : {form.project_type}</p>
+                {form.project_type.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {form.project_type.map((t) => (
+                      <span key={t} className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-medium">{t}</span>
+                    ))}
+                  </div>
                 )}
               </div>
               <div>
@@ -279,7 +303,7 @@ export default function CreateMissionPage() {
                 ))}
               </div>
               <div className="flex gap-4 text-sm text-gray-500">
-                {form.project_type && <span>📋 {form.project_type}</span>}
+                {form.project_type.length > 0 && <span>📋 {form.project_type.join(" · ")}</span>}
                 {form.budget && <span>💰 {form.budget}€</span>}
               </div>
             </div>

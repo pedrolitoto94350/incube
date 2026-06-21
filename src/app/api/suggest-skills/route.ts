@@ -86,10 +86,24 @@ Réponds UNIQUEMENT avec un tableau JSON : ["Compétence 1", "Compétence 2", ..
       skills = cleaned.split(",").map((s: string) => s.replace(/^[\s"'\[]+/, "").replace(/[\s"'\]\,]+$/, "")).filter(Boolean);
     }
 
-    // Filtrer pour ne garder que les skills de la liste
-    const valid = skills.filter((s: string) => SKILLS_LIST.includes(s) || s.includes("/"));
+    // Filtrer avec matching plus permissif (contient plutôt que égal)
+    const allSkillsLower = SKILLS_LIST.map((s) => s.toLowerCase());
+    const valid = skills.filter((s: string) => {
+      const sl = s.toLowerCase().trim();
+      return allSkillsLower.some((ref) => ref === sl || ref.includes(sl) || sl.includes(ref));
+    });
+
+    // Si on a "stripe" mais pas "Stripe API", on ajoute Stripe API
+    const enriched = [...valid];
+    const validLower = valid.map((s: string) => s.toLowerCase());
+    for (const skill of SKILLS_LIST) {
+      const sl = skill.toLowerCase();
+      if (!validLower.some((v) => v.includes(sl) || sl.includes(v))) continue;
+      if (!enriched.includes(skill)) enriched.push(skill);
+    }
+
     const fallback = FALLBACK_MAP[description.toLowerCase().slice(0, 20)];
-    const final = valid.length >= 2 ? valid : (fallback || ["React", "Node.js", "Tailwind CSS"]);
+    const final = enriched.length >= 2 ? enriched : (fallback || ["React", "Node.js", "Tailwind CSS"]);
 
     return NextResponse.json({ skills: final });
   } catch (error) {
