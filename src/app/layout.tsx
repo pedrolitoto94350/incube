@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "InCube — Le matching équitable devs & missions",
   description:
     "Plateforme de matching entre développeurs juniors et employeurs. Matching aléatoire équitable, zéro engagement après le match, commission unique de 300€.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
