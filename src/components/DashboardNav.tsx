@@ -74,13 +74,15 @@ export default function DashboardNav({ role }: DashboardNavProps) {
     router.push("/");
   };
 
-  const devLinks = [
+  type NavLink = { href: string; label: string; badge?: number };
+
+  const devLinks: NavLink[] = [
     { href: "/dashboard/dev", label: "📊 Dashboard" },
     { href: "/dashboard/dev/matches", label: "🤝 Mes matchs" },
     { href: "/dashboard/dev/profile", label: "👤 Mon profil" },
   ];
 
-  const empLinks = [
+  const empLinks: NavLink[] = [
     { href: "/dashboard/employer", label: "📊 Dashboard" },
     { href: "/dashboard/employer/missions", label: "📋 Mes missions" },
     { href: "/dashboard/employer/create-mission", label: "➕ Nouvelle mission" },
