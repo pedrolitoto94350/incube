@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "InCube — Le matching équitable devs & missions",
   description:
     "Plateforme de matching entre développeurs juniors et employeurs. Matching aléatoire équitable, zéro engagement après le match, commission unique de 300€.",
+  verification: {
+    google: "PKV5XbzBZwjjYmZq9fqh-aSbxfFpciq_lNXsTkV_OS0",
+  },
   icons: {
     icon: "/favicon.svg",
     shortcut: "/icon.png",
