@@ -78,7 +78,7 @@ export default function DevDashboard() {
           {[
             { label: "Anglais", value: profile.english_level || "Non renseigné", emoji: "🌍", color: "from-emerald-50 to-teal-50" },
             { label: "Disponibilité", value: profile.availability || "Non renseignée", emoji: "⏰", color: "from-amber-50 to-orange-50" },
-            { label: "Matching", value: "En recherche active", emoji: "🎯", color: "from-blue-50 to-emerald-50" },
+            { label: "Matching", value: "En recherche active", emoji: "🎯", color: "from-emerald-50 to-teal-50" },
           ].map((stat) => (
             <div
               key={stat.label}
