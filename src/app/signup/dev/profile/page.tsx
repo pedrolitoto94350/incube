@@ -144,9 +144,9 @@ function TagInput({
     <div>
       <div className="flex flex-wrap gap-2 mb-3">
         {tags.map((tag) => (
-          <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-indigo-100 text-indigo-800 text-sm font-medium">
+          <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-sm font-medium">
             {tag}
-            <button type="button" onClick={() => removeTag(tag)} className="text-indigo-400 hover:text-indigo-700">&times;</button>
+            <button type="button" onClick={() => removeTag(tag)} className="text-emerald-400 hover:text-emerald-700">&times;</button>
           </span>
         ))}
       </div>
@@ -159,13 +159,13 @@ function TagInput({
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); if (input.trim()) addTag(input); } if (e.key === "Backspace" && !input && tags.length) removeTag(tags[tags.length - 1]); }}
           placeholder={placeholder || "Tapez un outil puis Entrée"}
-          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all text-sm"
+          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-sm"
         />
         {showSuggestions && filtered.length > 0 && (
           <div className="absolute z-20 top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg max-h-40 overflow-y-auto">
             {filtered.map((s) => (
               <button key={s} type="button" onMouseDown={(e) => { e.preventDefault(); addTag(s); }}
-                className="w-full text-left px-4 py-2 text-sm hover:bg-indigo-50 text-gray-700 transition-colors"
+                className="w-full text-left px-4 py-2 text-sm hover:bg-emerald-50 text-gray-700 transition-colors"
               >{s}</button>
             ))}
           </div>
@@ -189,7 +189,7 @@ function ImagePreview({ file, index, caption, onCaptionChange, onRemove }: {
       <img src={url} alt={`Capture ${index + 1}`} className="w-full h-40 object-cover rounded-lg mb-2" />
       <input type="text" value={caption} onChange={(e) => onCaptionChange(e.target.value)}
         placeholder="Ex : Tableau de bord d'automatisation des commandes" maxLength={100}
-        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-indigo-400" />
+        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-emerald-400" />
       <p className="text-xs text-gray-400 mt-1">Légende ({caption.length}/100)</p>
     </div>
   );
@@ -209,7 +209,7 @@ function AnonymousTextarea({ value, onChange, placeholder, maxLength, rows, auto
     <div>
       <textarea value={value} onChange={(e) => { onChange(e.target.value); setWarn(hasContactInfo(e.target.value)); }}
         placeholder={placeholder} maxLength={maxLength} rows={rows || 4} autoFocus={autoFocus}
-        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none resize-none transition-all text-sm"
+        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none resize-none transition-all text-sm"
       />
       {warn && <p className="text-xs text-red-600 mt-1">Pour protéger votre anonymat, les coordonnées et liens externes ne sont pas autorisés.</p>}
       {helpText && !warn && <p className="text-xs text-gray-400 mt-1">{helpText}</p>}
@@ -369,11 +369,11 @@ export default function DevProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-white py-8 px-4">
       <div className="w-full max-w-2xl mx-auto">
         <div className="text-center mb-6">
           <Link href="/" className="flex flex-col leading-none">
-            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">InCube</span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent">InCube</span>
             <span className="text-xs italic text-gray-400 -mt-1">project</span>
           </Link>
           <h1 className="text-xl font-bold mt-4 mb-1 text-gray-900">Finalise ton profil développeur</h1>
@@ -388,7 +388,7 @@ export default function DevProfilePage() {
                 <div className={classNames(
                   "w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300",
                   step > i + 1 ? "bg-emerald-500 text-white"
-                  : step === i + 1 ? "bg-indigo-600 text-white ring-4 ring-indigo-100"
+                  : step === i + 1 ? "bg-emerald-600 text-white ring-4 ring-emerald-100"
                   : "bg-gray-100 text-gray-400"
                 )}>
                   {step > i + 1 ? (
@@ -397,12 +397,12 @@ export default function DevProfilePage() {
                     </svg>
                   ) : i + 1}
                 </div>
-                <span className={classNames("text-xs mt-1.5 font-medium", step >= i + 1 ? "text-indigo-600" : "text-gray-400")}>{label}</span>
+                <span className={classNames("text-xs mt-1.5 font-medium", step >= i + 1 ? "text-emerald-600" : "text-gray-400")}>{label}</span>
               </div>
             ))}
           </div>
           <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+            <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500"
               style={{ width: `${((step - 1) / (STEPS_LABELS.length - 1)) * 100}%` }} />
           </div>
         </div>
@@ -422,8 +422,8 @@ export default function DevProfilePage() {
                     {PROJECT_TYPES.map((pt) => (
                       <button key={pt.value} type="button" onClick={() => toggleProjectType(pt.value)}
                         className={classNames("px-4 py-3 rounded-xl border-2 text-left text-sm font-medium transition-all",
-                          form.projectTypes.includes(pt.value) ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                          : "border-gray-100 bg-white text-gray-600 hover:border-indigo-200 hover:text-indigo-600"
+                          form.projectTypes.includes(pt.value) ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                          : "border-gray-100 bg-white text-gray-600 hover:border-emerald-200 hover:text-emerald-600"
                         )}>{pt.label}</button>
                     ))}
                   </div>
@@ -431,7 +431,7 @@ export default function DevProfilePage() {
                     <input type="text" value={form.projectTypeOther}
                       onChange={(e) => updateForm({ projectTypeOther: e.target.value })}
                       placeholder="Précisez le type de projet" maxLength={100}
-                      className="mt-3 w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-indigo-400 outline-none text-sm" />
+                      className="mt-3 w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-400 outline-none text-sm" />
                   )}
                 </div>
                 <div>
@@ -442,7 +442,7 @@ export default function DevProfilePage() {
                 </div>
                 <div className="flex justify-end pt-4 border-t border-gray-100">
                   <button type="button" onClick={() => canGoNext(1) && setStep(2)} disabled={!canGoNext(1)}
-                    className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm">
+                    className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm">
                     Étape suivante →
                   </button>
                 </div>
@@ -464,7 +464,7 @@ export default function DevProfilePage() {
                   <input type="number" value={form.dailyRate}
                     onChange={(e) => updateForm({ dailyRate: e.target.value ? Number(e.target.value) : "" })}
                     min={0} max={99999}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all" placeholder="350" />
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition-all" placeholder="350" />
                   <p className="text-xs text-gray-400 mt-1">Vous gardez 100% de ce tarif. La mise en relation est financée par l&apos;entreprise.</p>
                 </div>
                 <div>
@@ -473,8 +473,8 @@ export default function DevProfilePage() {
                     {AVAILABILITIES.map((av) => (
                       <button key={av.value} type="button" onClick={() => updateForm({ availability: av.value })}
                         className={classNames("px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all",
-                          form.availability === av.value ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                          : "border-gray-100 bg-white text-gray-600 hover:border-indigo-200 hover:text-indigo-600"
+                          form.availability === av.value ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                          : "border-gray-100 bg-white text-gray-600 hover:border-emerald-200 hover:text-emerald-600"
                         )}>{av.label}</button>
                     ))}
                   </div>
@@ -482,7 +482,7 @@ export default function DevProfilePage() {
                 <div className="flex justify-between pt-4 border-t border-gray-100">
                   <button type="button" onClick={() => setStep(1)} className="px-6 py-2.5 rounded-xl text-gray-500 hover:text-gray-700 transition-all text-sm">← Retour</button>
                   <button type="button" onClick={() => canGoNext(2) && setStep(3)} disabled={!canGoNext(2)}
-                    className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm">
+                    className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm">
                     Étape suivante →
                   </button>
                 </div>
@@ -504,7 +504,7 @@ export default function DevProfilePage() {
                         onRemove={() => { updateForm({ screenshots: form.screenshots.filter((_, idx) => idx !== i), screenshotCaptions: form.screenshotCaptions.filter((_, idx) => idx !== i) }); }} />
                     ))}
                     {form.screenshots.length < 5 && (
-                      <label className="flex items-center justify-center h-44 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/30 transition-all">
+                      <label className="flex items-center justify-center h-44 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-all">
                         <div className="text-center"><span className="text-2xl text-gray-300">+</span><p className="text-xs text-gray-400 mt-1">Ajouter une capture</p></div>
                         <input type="file" accept="image/*" className="hidden" onChange={(e) => addScreenshots(e.target.files)} />
                       </label>
@@ -522,7 +522,7 @@ export default function DevProfilePage() {
                       <button type="button" onClick={() => updateForm({ demoVideo: null })} className="text-red-500 hover:text-red-700 text-sm">Supprimer</button>
                     </div>
                   ) : (
-                    <label className="flex items-center justify-center h-24 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/30 transition-all">
+                    <label className="flex items-center justify-center h-24 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-all">
                       <div className="text-center"><span className="text-2xl text-gray-300">🎬</span><p className="text-xs text-gray-400 mt-1">Ajouter une vidéo</p></div>
                       <input type="file" accept="video/mp4,video/webm" className="hidden"
                         onChange={(e) => { if (e.target.files?.[0]) updateForm({ demoVideo: e.target.files[0] }); }} />
@@ -539,7 +539,7 @@ export default function DevProfilePage() {
                       <div className="flex items-center gap-2">
                         <textarea value={snip} onChange={(e) => updateCodeSnippet(i, e.target.value)} rows={3}
                           placeholder={`Extrait ${i + 1}`}
-                          className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:border-indigo-400 outline-none text-sm font-mono resize-none" />
+                          className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-400 outline-none text-sm font-mono resize-none" />
                         {form.codeSnippets.length > 1 && (
                           <button type="button" onClick={() => removeCodeSnippet(i)} className="text-red-400 hover:text-red-600 text-xl">&times;</button>
                         )}
@@ -548,7 +548,7 @@ export default function DevProfilePage() {
                     </div>
                   ))}
                   {form.codeSnippets.length < 3 && form.codeSnippets[form.codeSnippets.length - 1]?.trim() && (
-                    <button type="button" onClick={addCodeSnippet} className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">+ Ajouter un extrait</button>
+                    <button type="button" onClick={addCodeSnippet} className="text-sm text-emerald-600 hover:text-emerald-800 font-medium">+ Ajouter un extrait</button>
                   )}
                 </div>
 
@@ -567,14 +567,14 @@ export default function DevProfilePage() {
                     </div>
                   ))}
                   {form.textShowcases.length < 3 && form.textShowcases[form.textShowcases.length - 1]?.trim() && (
-                    <button type="button" onClick={addTextShowcase} className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">+ Ajouter un exemple</button>
+                    <button type="button" onClick={addTextShowcase} className="text-sm text-emerald-600 hover:text-emerald-800 font-medium">+ Ajouter un exemple</button>
                   )}
                 </div>
 
                 <div className="flex justify-between pt-4 border-t border-gray-100">
                   <button type="button" onClick={() => setStep(2)} className="px-6 py-2.5 rounded-xl text-gray-500 hover:text-gray-700 transition-all text-sm">← Retour</button>
                   <button type="button" onClick={() => canGoNext(3) && setStep(4)} disabled={!canGoNext(3)}
-                    className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm">
+                    className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm">
                     Étape suivante →
                   </button>
                 </div>
@@ -589,7 +589,7 @@ export default function DevProfilePage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Email de contact</label>
                     <input type="email" value={form.contactEmail} onChange={(e) => updateForm({ contactEmail: e.target.value })} required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all" placeholder="vous@exemple.fr" />
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition-all" placeholder="vous@exemple.fr" />
                     <p className="text-xs text-gray-400 mt-1">Chiffré et invisible sur votre profil. Révélé uniquement au recruteur après que vous ayez accepté un match.</p>
                   </div>
                 </div>
@@ -604,7 +604,7 @@ export default function DevProfilePage() {
                     ].map((item) => (
                       <label key={item.key} className="flex items-start gap-3 cursor-pointer">
                         <input type="checkbox" checked={(form as any)[item.key]} onChange={(e) => updateForm({ [item.key]: e.target.checked } as any)}
-                          className="mt-1 w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                          className="mt-1 w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
                         <span className="text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: item.label }} />
                       </label>
                     ))}
@@ -630,7 +630,7 @@ export default function DevProfilePage() {
               <strong>Dev#{String(devNumber).padStart(3, "0")}</strong>.
             </p>
             <Link href={`/profile/dev/${devNumber}`}
-              className="inline-block mt-3 px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg transition-all text-sm">
+              className="inline-block mt-3 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg transition-all text-sm">
               Voir mon profil public
             </Link>
           </div>

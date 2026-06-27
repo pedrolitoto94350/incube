@@ -73,10 +73,10 @@ export default function DevProfilePage() {
     setSaving(false);
   };
 
-  if (loading) return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30"><DashboardNav role="dev" /><div className="max-w-4xl mx-auto px-4 pt-28"><div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mt-20" /></div></div>;
+  if (loading) return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30"><DashboardNav role="dev" /><div className="max-w-4xl mx-auto px-4 pt-28"><div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mt-20" /></div></div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
       <DashboardNav role="dev" />
       <div className="max-w-4xl mx-auto px-4 pt-28 pb-12">
         <h1 className="text-2xl font-bold text-slate-900 mb-6">✏️ Mon profil</h1>
@@ -99,10 +99,10 @@ export default function DevProfilePage() {
                 <button
                   key={s}
                   onClick={() => toggleSkill(s)}
-                  className="px-3.5 py-2 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition-all flex items-center gap-1.5 group"
+                  className="px-3.5 py-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-sm font-medium shadow-sm hover:shadow-md transition-all flex items-center gap-1.5 group"
                 >
                   {s}
-                  <span className="text-indigo-200 group-hover:text-white transition-colors">✕</span>
+                  <span className="text-emerald-200 group-hover:text-white transition-colors">✕</span>
                 </button>
               ))}
             </div>
@@ -122,8 +122,8 @@ export default function DevProfilePage() {
                         onClick={() => toggleSkill(skill)}
                         className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-all ${
                           isSelected
-                            ? "bg-indigo-100 text-indigo-700 border-indigo-200"
-                            : "bg-white text-slate-600 border-slate-200 hover:border-indigo-200 hover:text-indigo-600"
+                            ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+                            : "bg-white text-slate-600 border-slate-200 hover:border-emerald-200 hover:text-emerald-600"
                         }`}
                       >
                         {skill}
@@ -142,7 +142,7 @@ export default function DevProfilePage() {
           <div className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">🌍 Niveau d&apos;anglais</label>
-              <select value={englishLevel} onChange={(e) => setEnglishLevel(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none bg-white text-slate-700 focus:border-indigo-400">
+              <select value={englishLevel} onChange={(e) => setEnglishLevel(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none bg-white text-slate-700 focus:border-emerald-400">
                 <option value="">Sélectionne</option>
                 <option value="debutant">Débutant</option>
                 <option value="intermediaire">Intermédiaire</option>
@@ -152,7 +152,7 @@ export default function DevProfilePage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">⏰ Disponibilité</label>
-              <select value={availability} onChange={(e) => setAvailability(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none bg-white text-slate-700 focus:border-indigo-400">
+              <select value={availability} onChange={(e) => setAvailability(e.target.value)} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none bg-white text-slate-700 focus:border-emerald-400">
                 <option value="">Sélectionne</option>
                 <option value="immediat">Immédiat</option>
                 <option value="1-semaine">Sous 1 semaine</option>
@@ -163,13 +163,13 @@ export default function DevProfilePage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">📝 Bio</label>
-              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={4} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-indigo-400 text-slate-700" placeholder="Parle-nous de toi, ton parcours, tes projets..." />
+              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={4} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-emerald-400 text-slate-700" placeholder="Parle-nous de toi, ton parcours, tes projets..." />
             </div>
           </div>
         </div>
 
         {/* Save */}
-        <button onClick={save} disabled={saving} className="w-full md:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-indigo-200 transition-all disabled:opacity-50 text-center">
+        <button onClick={save} disabled={saving} className="w-full md:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg hover:shadow-emerald-200 transition-all disabled:opacity-50 text-center">
           {saving ? (
             <span className="flex items-center justify-center gap-2">
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

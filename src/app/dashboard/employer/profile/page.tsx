@@ -48,7 +48,7 @@ function SetupForm({ onSuccess }: { onSuccess: () => void }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm">{error}</div>}
       <PaymentElement />
-      <button type="submit" disabled={!stripe || loading} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg transition-all disabled:opacity-50">
+      <button type="submit" disabled={!stripe || loading} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg transition-all disabled:opacity-50">
         {loading ? "..." : "Enregistrer la carte"}
       </button>
     </form>
@@ -110,11 +110,11 @@ export default function EmployerEditProfile() {
         <div className="bg-white rounded-2xl border border-gray-100 p-8 space-y-6 mb-6">
           <div>
             <label className="block text-sm font-medium mb-1.5 text-gray-700">🏢 Entreprise</label>
-            <input type="text" value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-400 outline-none" />
+            <input type="text" value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-400 outline-none" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5 text-gray-700">👤 Votre nom</label>
-            <input type="text" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-400 outline-none" />
+            <input type="text" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-400 outline-none" />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5 text-gray-700">👥 Taille</label>
@@ -141,7 +141,7 @@ export default function EmployerEditProfile() {
               <option value="autre">Autre</option>
             </select>
           </div>
-          <button onClick={saveProfile} disabled={saving} className="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:shadow-lg transition-all disabled:opacity-50">
+          <button onClick={saveProfile} disabled={saving} className="px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium hover:shadow-lg transition-all disabled:opacity-50">
             {saving ? "Sauvegarde..." : "Sauvegarder"}
           </button>
         </div>
