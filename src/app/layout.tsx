@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import CookieConsentBanner from "@/components/CookieConsent";
+import { GoogleAnalytics } from "@next/third-parties/google";
+
+const GA_ID = "G-79K3RW5K04";
 
 export const metadata: Metadata = {
   title: "InCube — Le matching équitable devs & missions",
@@ -21,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased bg-gray-50 text-gray-900 min-h-screen">
         {children}
         <CookieConsentBanner />
+        <GoogleAnalytics gaId={GA_ID} />
       </body>
     </html>
   );
