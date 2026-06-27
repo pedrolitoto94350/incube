@@ -227,5 +227,21 @@ export default function Home() {
         </div>
       </footer>
     </>
+
+      {/* Schema.org JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "InCube",
+            url: "https://incube-project.com",
+            description: "Plateforme de matching équitable entre développeurs juniors et employeurs.",
+            slogan: "Le talent ne se mesure pas à un diplôme",
+          }),
+        }}
+      />
+    </>
   );
 }
