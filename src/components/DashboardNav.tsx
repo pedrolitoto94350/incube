@@ -99,9 +99,12 @@ export default function DashboardNav({ role }: { role: "dev" | "employer" }) {
       }`}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link href="/" className={`font-bold text-lg ${
+            <Link href="/" className={`flex flex-col leading-none ${
               isEmployer ? "text-emerald-300" : "text-indigo-300"
-            }`}>InCube</Link>
+            }`}>
+              <span className="font-bold text-lg">InCube</span>
+              <span className="text-[11px] italic opacity-60 -mt-0.5">project</span>
+            </Link>
             <div className="hidden md:flex items-center gap-6">
               {links.map((link) => (
                 <Link key={link.href} href={link.href} className="relative text-sm">

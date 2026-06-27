@@ -52,7 +52,10 @@ export default function Home() {
       <ParticleBackground />
       <nav className="fixed top-0 left-0 right-0 z-50 bg-emerald-950/90 backdrop-blur-md border-b border-emerald-800">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-emerald-300">InCube</Link>
+          <Link href="/" className="flex flex-col leading-none text-emerald-300">
+            <span className="text-xl font-bold">InCube</span>
+            <span className="text-[10px] italic opacity-60 -mt-0.5">project</span>
+          </Link>
           <div className="hidden md:flex items-center gap-8 text-sm">
             <a href="#pourquoi-incube" className="text-emerald-100/70 hover:text-emerald-100 transition-colors">Notre philosophie</a>
             <a href="#pour-employeurs" className="text-emerald-100/70 hover:text-emerald-100 transition-colors">Employeurs</a>
@@ -191,7 +194,10 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <span className="font-bold text-emerald-600 text-lg">InCube</span>
+              <span className="flex flex-col leading-none">
+                <span className="font-bold text-emerald-600 text-lg">InCube</span>
+                <span className="text-[11px] italic text-gray-400 -mt-0.5">project</span>
+              </span>
               <p className="text-sm text-gray-500 mt-2">Plateforme de matching équitable entre développeurs et employeurs.</p>
             </div>
             <div>

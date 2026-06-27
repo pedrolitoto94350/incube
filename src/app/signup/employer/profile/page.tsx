@@ -44,7 +44,10 @@ export default function EmployerProfilePage() {
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-indigo-50 to-white py-12">
       <div className="w-full max-w-xl">
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">InCube</Link>
+          <Link href="/" className="flex flex-col leading-none">
+            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">InCube</span>
+            <span className="text-xs italic text-gray-400 -mt-1">project</span>
+          </Link>
           <h1 className="text-2xl font-bold mt-6 mb-2">Complétez votre profil</h1>
           <p className="text-gray-500 text-sm">Parlez-nous de votre entreprise</p>
         </div>

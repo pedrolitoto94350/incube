@@ -33,7 +33,10 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-emerald-50 to-white">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-emerald-600">InCube</Link>
+          <Link href="/" className="flex flex-col leading-none text-emerald-600">
+            <span className="text-2xl font-bold">InCube</span>
+            <span className="text-xs italic opacity-60 -mt-1">project</span>
+          </Link>
           <h1 className="text-2xl font-bold mt-6 mb-2">Connexion</h1>
           <p className="text-gray-500 text-sm">Accédez à votre tableau de bord</p>
         </div>

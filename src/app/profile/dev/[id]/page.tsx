@@ -108,7 +108,10 @@ export default function DevProfilePublicPage() {
       <nav className="bg-emerald-900 text-white sticky top-0 z-30 shadow-md">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-lg font-bold tracking-tight">InCube</Link>
+            <Link href="/" className="flex flex-col leading-none">
+              <span className="text-lg font-bold tracking-tight">InCube</span>
+              <span className="text-[10px] italic opacity-70 -mt-0.5">project</span>
+            </Link>
             <span className="text-emerald-300 text-sm">|</span>
             <span className="text-sm text-emerald-200">{devLabel}</span>
           </div>

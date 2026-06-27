@@ -372,7 +372,10 @@ export default function DevProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white py-8 px-4">
       <div className="w-full max-w-2xl mx-auto">
         <div className="text-center mb-6">
-          <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">InCube</Link>
+          <Link href="/" className="flex flex-col leading-none">
+            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">InCube</span>
+            <span className="text-xs italic text-gray-400 -mt-1">project</span>
+          </Link>
           <h1 className="text-xl font-bold mt-4 mb-1 text-gray-900">Finalise ton profil développeur</h1>
           <p className="text-sm text-gray-500">Anonyme jusqu&apos;au match. Montre tes compétences, cache ton identité.</p>
         </div>
