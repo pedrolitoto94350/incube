@@ -34,7 +34,7 @@ export default function EmployerDashboard() {
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" /></div>;
   if (!profile?.company_name) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50">
         <DashboardNav role="employer" />
         <div className="max-w-4xl mx-auto px-4 pt-24 pb-8">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 p-8 md:p-12 text-white">

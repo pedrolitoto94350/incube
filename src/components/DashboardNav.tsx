@@ -91,12 +91,18 @@ export default function DashboardNav({ role }: DashboardNavProps) {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md bg-emerald-950 text-emerald-100 border-emerald-800">
+      <nav className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md ${
+        isEmployer
+          ? "bg-emerald-950 text-emerald-100 border-emerald-800"
+          : "bg-indigo-950 text-indigo-100 border-indigo-800"
+      }`}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link
               href="/"
-              className="flex flex-col leading-none text-emerald-300"
+              className={`flex flex-col leading-none ${
+                isEmployer ? "text-emerald-300" : "text-indigo-300"
+              }`}
             >
               <span className="font-bold text-lg">InCube</span>
               <span className="text-[11px] italic opacity-60 -mt-0.5">
@@ -113,26 +119,29 @@ export default function DashboardNav({ role }: DashboardNavProps) {
                   {pathname === link.href && (
                     <motion.div
                       layoutId="nav"
-                      className="absolute -bottom-[17px] left-0 right-0 h-0.5 bg-emerald-400"
+                      className={`absolute -bottom-[17px] left-0 right-0 h-0.5 ${
+                        isEmployer ? "bg-emerald-400" : "bg-indigo-400"
+                      }`}
                     />
                   )}
                   <span
                     className={`relative inline-flex items-center gap-1 ${
                       pathname === link.href
-                        ? "text-emerald-200 font-medium"
+                        ? isEmployer
+                          ? "text-emerald-200 font-medium"
+                          : "text-indigo-200 font-medium"
                         : "text-white/60 hover:text-white/90"
                     }`}
                   >
                     {link.label}
-                    {link.badge
-                      ? link.badge > 0
-                        ? link.badge
-                        : 0
-                      : null}
                   </span>
                 </Link>
               ))}
-              <span className="ml-4 text-xs px-3 py-1 rounded-xl font-bold tracking-wider uppercase bg-emerald-800 text-emerald-200">
+              <span className={`ml-4 text-xs px-3 py-1 rounded-xl font-bold tracking-wider uppercase ${
+                isEmployer
+                  ? "bg-emerald-800 text-emerald-200"
+                  : "bg-indigo-800 text-indigo-200"
+              }`}>
                 {isEmployer ? "🏢 EMPLOYEUR" : "👨‍💻 DEV"}
               </span>
             </div>
@@ -176,7 +185,11 @@ export default function DashboardNav({ role }: DashboardNavProps) {
 
           <button
             onClick={handleLogout}
-            className="hidden md:block text-sm text-emerald-300 hover:text-emerald-100 transition-colors"
+            className={`hidden md:block text-sm transition-colors ${
+              isEmployer
+                ? "text-emerald-300 hover:text-emerald-100"
+                : "text-indigo-300 hover:text-indigo-100"
+            }`}
           >
             Déconnexion
           </button>
@@ -189,10 +202,18 @@ export default function DashboardNav({ role }: DashboardNavProps) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="fixed top-16 left-0 right-0 z-50 md:hidden shadow-lg border-b bg-emerald-950 border-emerald-800"
+            className={`fixed top-16 left-0 right-0 z-50 md:hidden shadow-lg border-b ${
+              isEmployer
+                ? "bg-emerald-950 border-emerald-800"
+                : "bg-indigo-950 border-indigo-800"
+            }`}
           >
             <div className="px-4 py-3 space-y-1">
-              <div className="text-xs px-3 py-2 rounded-xl font-bold tracking-wider uppercase text-center mb-2 bg-emerald-800 text-emerald-200">
+              <div className={`text-xs px-3 py-2 rounded-xl font-bold tracking-wider uppercase text-center mb-2 ${
+                isEmployer
+                  ? "bg-emerald-800 text-emerald-200"
+                  : "bg-indigo-800 text-indigo-200"
+              }`}>
                 {isEmployer ? "🏢 EMPLOYEUR" : "👨‍💻 DEV"}
               </div>
               {links.map((link) => (
@@ -202,7 +223,9 @@ export default function DashboardNav({ role }: DashboardNavProps) {
                   onClick={() => setMenuOpen(false)}
                   className={`relative flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     pathname === link.href
-                      ? "bg-emerald-800 text-emerald-200"
+                      ? isEmployer
+                        ? "bg-emerald-800 text-emerald-200"
+                        : "bg-indigo-800 text-indigo-200"
                       : "text-white/60 hover:bg-white/10"
                   }`}
                 >
@@ -214,7 +237,7 @@ export default function DashboardNav({ role }: DashboardNavProps) {
                   )}
                 </Link>
               ))}
-              <hr className="my-2 border-emerald-800" />
+              <hr className={`my-2 ${isEmployer ? "border-emerald-800" : "border-indigo-800"}`} />
               <button
                 onClick={handleLogout}
                 className="w-full text-left px-4 py-3 rounded-xl text-sm text-red-400 hover:bg-red-900/30 font-medium transition-all"
