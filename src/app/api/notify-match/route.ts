@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "InCube Project <incube@incube.meleads.fr>",
+        from: "InCube Project <noreply@incube-project.com>",
         to: devProfile.email,
         subject: `💼 ${employerName} a une mission pour vous !`,
         html: `
