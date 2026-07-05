@@ -112,7 +112,11 @@ export default function DevDashboard() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-400 text-sm">Aucune compétence renseignée</p>
+              <div className="text-center py-4">
+                <p className="text-amber-600 text-sm font-medium mb-1">⚠️ Aucune compétence renseignée</p>
+                <p className="text-slate-400 text-xs">Les employeurs ne peuvent pas te trouver sans compétences. Ajoute-les vite dans ton profil !</p>
+                <Link href="/dashboard/dev/profile" className="inline-block mt-3 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium rounded-xl hover:shadow-md transition-all">✏️ Ajouter mes compétences</Link>
+              </div>
             )}
           </div>
         </div>

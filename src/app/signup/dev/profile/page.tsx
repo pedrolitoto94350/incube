@@ -293,7 +293,7 @@ export default function DevProfilePage() {
 
   const canGoNext = (s: number): boolean => {
     switch (s) {
-      case 1: return form.projectTypes.length >= 1;
+      case 1: return form.projectTypes.length >= 1 && form.skills.length >= 1;
       case 2: return form.bio.trim().length > 0 && form.dailyRate !== "" && Number(form.dailyRate) > 0 && form.availability !== "" && !hasContactInfo(form.bio);
       case 3: return true;
       case 4: return form.contactEmail.includes("@") && form.acceptCheck1 && form.acceptCheck2 && form.acceptCheck3;
@@ -436,9 +436,9 @@ export default function DevProfilePage() {
                 </div>
                 <div>
                   <h2 className="font-semibold text-lg text-gray-900 mb-1">🛠️ Vos outils et technologies</h2>
-                  <p className="text-sm text-gray-400 mb-3">Ajoutez au moins 3 technologies</p>
+                  <p className="text-sm text-gray-400 mb-3">Ajoutez au moins 1 technologie (obligatoire)</p>
                   <TagInput tags={form.skills} onChange={(tags) => updateForm({ skills: tags })}
-                    suggestions={SKILL_SUGGESTIONS} placeholder="Tapez un outil puis Entrée (ex: React, Docker…)" minTags={3} />
+                    suggestions={SKILL_SUGGESTIONS} placeholder="Tapez un outil puis Entrée (ex: React, Docker…)" minTags={1} />
                 </div>
                 <div className="flex justify-end pt-4 border-t border-gray-100">
                   <button type="button" onClick={() => canGoNext(1) && setStep(2)} disabled={!canGoNext(1)}

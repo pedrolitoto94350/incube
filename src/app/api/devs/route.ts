@@ -109,21 +109,31 @@ export async function POST(req: NextRequest) {
     // Filtrer par compétences
     if (skills && Array.isArray(skills) && skills.length > 0) {
       const lowerSkills = skills.map((s: string) => s.toLowerCase().trim());
-      filtered = filtered.filter((dev: any) =>
-        dev.skills.some((ds: string) =>
+      filtered = filtered.filter((dev: any) => {
+        // Chercher dans les skills structurés
+        const inSkills = dev.skills.some((ds: string) =>
           lowerSkills.some((ls: string) => ds.toLowerCase().includes(ls))
-        )
-      );
+        );
+        // Chercher aussi dans la bio (texte libre)
+        const inBio = lowerSkills.some((ls: string) =>
+          (dev.bio || "").toLowerCase().includes(ls)
+        );
+        return inSkills || inBio;
+      });
 
-      // Trier par pertinence
+      // Trier par pertinence (skills > bio)
       filtered.sort((a: any, b: any) => {
-        const aMatch = a.skills.filter((s: string) =>
+        const aSkills = a.skills.filter((s: string) =>
           lowerSkills.some((ls: string) => s.toLowerCase().includes(ls))
         ).length;
-        const bMatch = b.skills.filter((s: string) =>
+        const bSkills = b.skills.filter((s: string) =>
           lowerSkills.some((ls: string) => s.toLowerCase().includes(ls))
         ).length;
-        return bMatch - aMatch;
+        const aBio = (a.bio || "").toLowerCase();
+        const bBio = (b.bio || "").toLowerCase();
+        const aBioMatch = lowerSkills.filter((ls: string) => aBio.includes(ls)).length;
+        const bBioMatch = lowerSkills.filter((ls: string) => bBio.includes(ls)).length;
+        return (bSkills + bBioMatch) - (aSkills + aBioMatch);
       });
     }
 
