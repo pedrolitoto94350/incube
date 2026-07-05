@@ -171,8 +171,24 @@ function TagInput({
           </div>
         )}
       </div>
+      {/* Suggestions cliquables */}
+      {tags.length === 0 && input.length === 0 && (
+        <div className="mt-2">
+          <p className="text-xs text-gray-400 mb-1.5">Ou choisis parmi les plus courantes :</p>
+          <div className="flex flex-wrap gap-1.5">
+            {["React", "Next.js", "TypeScript", "JavaScript", "Python", "Node.js", "HTML/CSS", "Tailwind CSS", "PHP/Laravel", "WordPress", "Figma", "Docker", "PostgreSQL"].map((s) => (
+              <button key={s} type="button" onClick={() => addTag(s)}
+                className="text-xs px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-200 text-gray-600 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition-all"
+              >{s}</button>
+            ))}
+          </div>
+        </div>
+      )}
       {minTags && tags.length < minTags && (
-        <p className="text-xs text-amber-600 mt-1">Ajoutez au moins {minTags} technologies ({tags.length}/{minTags})</p>
+        <p className="text-xs text-amber-600 mt-1">Ajoutez au moins {minTags} technologie (actuellement : {tags.length})</p>
+      )}
+      {tags.length > 0 && (
+        <p className="text-xs text-gray-400 mt-1.5">Continue de taper ou clique sur les suggestions pour en ajouter d&apos;autres.</p>
       )}
     </div>
   );
