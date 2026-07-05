@@ -110,6 +110,19 @@ export default function CreateMissionPage() {
       status: "open",
     });
     if (insertError) { setError(insertError.message); setLoading(false); return; }
+    // Notifier les devs matchés par email
+    ;(async () => {
+      try {
+        const { data: newMatches } = await supabase.from("matches").select("id").eq("employer_id", user.id).order("created_at", { ascending: false }).limit(1);
+        if (newMatches?.[0]?.id) {
+          fetch("/api/notify-match", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ matchId: newMatches[0].id }),
+          }).catch(() => {});
+        }
+      } catch {}
+    })();
     router.push("/dashboard/employer/missions");
   };
 
