@@ -17,16 +17,23 @@ export async function POST(req: NextRequest) {
 
     const supabase = createSupabaseClient();
 
-    // Récupérer le match avec les infos employeur
+    // Récupérer le match
     const { data: match } = await supabase
       .from("matches")
-      .select("*, employer:employer_id(id, full_name, company_name, email)")
+      .select("*")
       .eq("id", matchId)
       .single();
 
     if (!match) {
       return NextResponse.json({ error: "Match introuvable" }, { status: 404 });
     }
+
+    // Récupérer l'employeur séparément (évite les problèmes de join)
+    const { data: employer } = await supabase
+      .from("profiles")
+      .select("full_name, company_name, email")
+      .eq("id", match.employer_id)
+      .single();
 
     // Récupérer le dev (destinataire)
     const { data: devProfile } = await supabase
@@ -41,7 +48,7 @@ export async function POST(req: NextRequest) {
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://incube-project.com";
     const matchUrl = `${siteUrl}/dashboard/dev/matches`;
-    const employerName = match.employer?.company_name || match.employer?.full_name || "Un employeur";
+    const employerName = employer?.company_name || employer?.full_name || "Un employeur";
     const devName = devProfile.full_name || `Dev#${String(devProfile.dev_number || "").padStart(3, "0")}`;
 
     // Envoyer l'email via Resend
